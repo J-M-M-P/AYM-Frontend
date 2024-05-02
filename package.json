@@ -29,5 +29,9 @@
     "sass": "^1.75.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
-  }
+  },
+  "description": "Dette er frontend delen af gruppen JMMP's 3.semesters systemsudviklings eksammens projekt.",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }
