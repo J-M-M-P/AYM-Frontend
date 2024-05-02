@@ -10,9 +10,9 @@ interface DropdownProps {
     items: DropdownItem[];
 }
 
-function ProductDropDown({ title, items, position }: DropdownProps) {
+function ProductDropDown({ title, items }: DropdownProps) {
     return (
-        <div className={`btn-group px-3 ${position}`}>
+        <div className={`btn-group px-3`}>
             <button
                 type="button"
                 className="btn btn-primary dropdown-toggle"
