@@ -145,12 +145,13 @@ function Product() {
                     </div>
 
                     {/* Område til productcards */}
-                    <div className="row row-cols-4">
+                    <div className="row row-cols-4 row-gap-5">
                         {testCards.map((card) => (
                             <ProductPageCards
                                 cardTitle={card.title}
                                 cardDescription={card.description}
                                 cardImgSrc={card.imgSrc}
+                                cardPrice={card.price}
                             />
                         ))}
                     </div>
