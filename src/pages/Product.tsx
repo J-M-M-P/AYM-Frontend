@@ -145,7 +145,7 @@ function Product() {
                     </div>
 
                     {/* Område til productcards */}
-                    <div className="row row-cols-4 row-gap-5">
+                    <div className="row row-cols-4 row-gap-5" style={{ marginBottom: "10rem" }}>
                         {testCards.map((card) => (
                             <ProductPageCards
                                 cardTitle={card.title}
