@@ -1,4 +1,6 @@
 import ProductDropDown from "../components/Product/ProductDropDown";
+import ProductPageCards from "../components/Product/ProductPageCards";
+import testCards from "../tests/testProductCardInfo";
 
 function Product() {
     return (
@@ -140,6 +142,17 @@ function Product() {
                                 </div>
                             </nav>
                         </div>
+                    </div>
+
+                    {/* Område til productcards */}
+                    <div className="row row-cols-4">
+                        {testCards.map((card) => (
+                            <ProductPageCards
+                                cardTitle={card.title}
+                                cardDescription={card.description}
+                                cardImgSrc={card.imgSrc}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
