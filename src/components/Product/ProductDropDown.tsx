@@ -18,7 +18,7 @@ function ProductDropDown({ title, items, group }: DropdownProps) {
     return (
         <>
             {(dropDownGroup !== true && (
-                <div className={`btn-group w-100 h-100 dropdown-center`}>
+                <div className={` w-100 h-100 dropdown-center`}>
                     <button
                         type="button"
                         className="btn dropdown-toggle border border-0 text-start"

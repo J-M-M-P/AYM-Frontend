@@ -1,5 +1,5 @@
 import ProductDropDown from "./ProductDropDown";
-import "./ProductNavbar.css";
+// import "./ProductNavbar.css";
 
 function ProductNavbar() {
     return (
