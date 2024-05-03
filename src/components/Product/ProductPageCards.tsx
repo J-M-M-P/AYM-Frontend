@@ -9,7 +9,7 @@ function ProductPageCards({ cardTitle, cardDescription, cardImgSrc, cardPrice }:
     return (
         <>
             <div className="col">
-                <div className="card h-100 w-4000">
+                <div className="card h-100">
                     <img src={cardImgSrc} className="card-img-top" alt={cardTitle} />
                     <div className="card-body">
                         <h5 className="card-title">{cardTitle}</h5>
