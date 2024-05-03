@@ -12,7 +12,7 @@ export default function NavHeader() {
                 <FaShoppingBag />
               </NavLink>
               <NavLink to="/shop" className="text-light text-decoration-none">
-                Butik
+                Shop
               </NavLink>
             </div>
 

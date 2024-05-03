@@ -1,3 +1,5 @@
+import NavHeader from "../components/Nav/NavHeader";
+
 type LayoutProps = {
     children: React.ReactNode;
 };
@@ -5,7 +7,7 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
     return (
         <div>
-            
+            <header><NavHeader /></header>
             <main>{children}</main>
         </div>
     );
