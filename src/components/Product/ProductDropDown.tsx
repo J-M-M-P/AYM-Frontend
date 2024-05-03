@@ -38,10 +38,10 @@ function ProductDropDown({ title, items, group }: DropdownProps) {
                     </ul>
                 </div>
             )) || (
-                <div className={`btn-group w-100 h-100 `}>
+                <div>
                     <button
                         type="button"
-                        className="btn dropdown-toggle text-end border-top border-bottom rounded-0"
+                        className="btn dropdown-toggle w-100 h-100  text-end border-top border-bottom rounded-0"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
