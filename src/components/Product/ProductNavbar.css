@@ -1,0 +1,25 @@
+.offcanvas-body .dropdown-menu {
+    position: absolute;
+    top: 100%; /* Justér efter behov */
+    left: 0;
+    transform: none;
+}
+
+.dropdown-menu {
+    z-index: 1050; /* Bootstrap's offcanvas z-index er normalt omkring 1040 */
+}
+
+@media (max-width: 768px) {
+    .dropdown-menu {
+        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        display: block !important;
+    }
+
+    .dropdown-open .dropdown-menu {
+        max-height: 500px; /* Justér denne værdi baseret på det forventede indhold */
+        opacity: 1;
+    }
+}
