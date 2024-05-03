@@ -4,11 +4,11 @@ function ProductNavbar() {
     return (
         <>
             {/* Filter Dropdowns & Off canvas menu when, width < navbar-expand-md */}
-            <div className="row mb-2 px-1">
+            <div className="row mb-2 px-3">
                 <div className="col px-0">
                     <nav className="navbar navbar-expand-md py-0 h-100">
                         <button
-                            className="navbar-toggler w-100 h-100"
+                            className="navbar-toggler w-100 h-100 text-start border border-start-0 rounded-0 my-auto"
                             type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasNavbar"
@@ -16,7 +16,17 @@ function ProductNavbar() {
                             aria-expanded="false"
                             aria-label="Toggle navigation"
                         >
-                            <span>FILTRER EFTER</span>
+                            <span className="fs-6">FILTRER EFTER</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="15"
+                                fill="black"
+                                className="bi bi-caret-down-fill"
+                                viewBox="-3 -3 19 25"
+                            >
+                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                            </svg>
                         </button>
 
                         <div
@@ -24,9 +34,10 @@ function ProductNavbar() {
                             tabIndex={-1}
                             id="offcanvasNavbar"
                             aria-labelledby="offcanvasNavbarLabel"
+                            style={{ width: "300px" }}
                         >
                             <div className="offcanvas-body">
-                                <ul className="navbar-nav justify-content-start flex-grow-1 pe-3">
+                                <ul className="navbar-nav justify-content-start">
                                     <li className="nav-item">
                                         <ProductDropDown
                                             title="PRIS"

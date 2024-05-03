@@ -18,16 +18,16 @@ function ProductDropDown({ title, items, group }: DropdownProps) {
     return (
         <>
             {(dropDownGroup !== true && (
-                <div className={`btn-group px-3`}>
+                <div className={`btn-group w-100 h-100`}>
                     <button
                         type="button"
-                        className="btn btn-primary dropdown-toggle"
+                        className="btn dropdown-toggle border border-0 text-start"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
                         {title}
                     </button>
-                    <ul className="dropdown-menu">
+                    <ul className="dropdown-menu end-0">
                         {items.map((item, index) => (
                             <li key={index}>
                                 <a className="dropdown-item" href={item.href}>
@@ -41,7 +41,7 @@ function ProductDropDown({ title, items, group }: DropdownProps) {
                 <div className={`btn-group w-100 h-100`}>
                     <button
                         type="button"
-                        className="btn btn-dark dropdown-toggle "
+                        className="btn dropdown-toggle text-end border-top border-bottom rounded-0"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
