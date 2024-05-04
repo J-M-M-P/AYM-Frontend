@@ -28,7 +28,7 @@ function Inventory() {
 
   return (
     <div>
-      <h1>Lager</h1>
+      <h1 style={{padding: "10vh"}}>Lager</h1>
 
       <div className="mb-3 d-flex justify-content-center">
         <div className="me-2">
