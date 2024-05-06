@@ -1,69 +1,145 @@
-import React, { useState } from "react";
-import { FaPlus, FaMinus } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaPlus, FaMinus, FaSortUp, FaSortDown } from "react-icons/fa";
+import { getProducts, updateInventory } from "../service/apiFacade";
+
+interface Product {
+  id: number;
+  name: string;
+  qty: number;
+}
+
+interface SortConfig {
+  key: keyof Product;
+  direction: string;
+}
 
 function Inventory() {
-  const [inventory, setInventory] = useState([
-    { id: 1, varenavn: "Vare 1", type: "Type 1", lagerbeholdning: 10 },
-    { id: 2, varenavn: "Vare 2", type: "Type 2", lagerbeholdning: 5 },
-    { id: 3, varenavn: "Vare 3", type: "Type 3", lagerbeholdning: 8 },
-  ]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [sortConfig, setSortConfig] = useState<SortConfig>({
+    key: "name",
+    direction: "ascending",
+  });
 
-  const handleAdd = (id, amount) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const productsData = await getProducts();
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleAdd = async (id: number, amount: string) => {
     if (!amount) return; // Check if amount is empty
-    const updatedInventory = inventory.map((item) =>
-      item.id === id ? { ...item, lagerbeholdning: item.lagerbeholdning + parseInt(amount) } : item
+    const updatedProducts = products.map((item) =>
+      item.id === id ? { ...item, qty: item.qty + parseInt(amount) } : item
     );
-    setInventory(updatedInventory);
+    setProducts(updatedProducts);
+    try {
+      await updateInventory(id, updatedProducts.find((item) => item.id === id)!);
+    } catch (error) {
+      console.error("Error updating inventory:", error);
+    }
   };
 
-  const handleRemove = (id, amount) => {
+  const handleRemove = async (id: number, amount: string) => {
     if (!amount) return; // Check if amount is empty
-    const updatedInventory = inventory.map((item) =>
-      item.id === id && item.lagerbeholdning >= parseInt(amount)
-        ? { ...item, lagerbeholdning: item.lagerbeholdning - parseInt(amount) }
+    const updatedProducts = products.map((item) =>
+      item.id === id && item.qty >= parseInt(amount)
+        ? { ...item, qty: item.qty - parseInt(amount) }
         : item
     );
-    setInventory(updatedInventory);
+    setProducts(updatedProducts);
+    try {
+      await updateInventory(id, updatedProducts.find((item) => item.id === id)!);
+    } catch (error) {
+      console.error("Error updating inventory:", error);
+    }
   };
+
+  const requestSort = (key: keyof Product) => {
+    let direction = "ascending";
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getClassNamesFor = (name: keyof Product) => {
+    if (!sortConfig) {
+      return;
+    }
+    return sortConfig.key === name ? sortConfig.direction : undefined;
+  };
+
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sortConfig.direction === "ascending") {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return -1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return 1;
+      }
+      return 0;
+    } else {
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return -1;
+      }
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return 1;
+      }
+      return 0;
+    }
+  });
 
   return (
     <div>
-      <h1 style={{padding: "10vh"}}>Lager</h1>
-
-      <div className="mb-3 d-flex justify-content-center">
-        <div className="me-2">
-          <select className="form-select" aria-label="Filter">
-            <option value="">Filter</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-          </select>
-        </div>
-        <div>
-          <select className="form-select" aria-label="Sort">
-            <option value="">Sort</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-          </select>
-        </div>
-      </div>
+      <h1 style={{ padding: "10vh" }}>Lager</h1>
 
       <table className="table" style={{ marginLeft: "10vh", marginRight: "10vh" }}>
         <thead>
           <tr>
-            <th scope="col">Varenavn</th>
-            <th scope="col">Type</th>
-            <th scope="col">Lagerbeholdning</th>
+            <th
+              scope="col"
+              onClick={() => requestSort("name")}
+              className={getClassNamesFor("name")}
+            >
+              Name
+              <div className="d-inline">
+                {sortConfig.key === "name" && sortConfig.direction === "ascending" && (
+                  <FaSortDown />
+                )}
+                {sortConfig.key === "name" && sortConfig.direction === "descending" && (
+                  <FaSortUp />
+                )}
+              </div>
+            </th>
+            <th
+              scope="col"
+              onClick={() => requestSort("qty")}
+              className={getClassNamesFor("qty")}
+            >
+              Qty
+              <div className="d-inline">
+                {sortConfig.key === "qty" && sortConfig.direction === "ascending" && (
+                  <FaSortDown />
+                )}
+                {sortConfig.key === "qty" && sortConfig.direction === "descending" && (
+                  <FaSortUp />
+                )}
+              </div>
+            </th>
             <th scope="col">Tilføj/Fjern</th>
           </tr>
         </thead>
         <tbody>
-          {inventory.map((item) => (
+          {sortedProducts.map((item) => (
             <tr key={item.id}>
-              <td>{item.varenavn}</td>
-              <td>{item.type}</td>
-              <td>{item.lagerbeholdning}</td>
+              <td>{item.name}</td>
+              <td>{item.qty}</td>
               <td>
                 <div className="d-flex align-items-center">
                   <input
@@ -76,7 +152,9 @@ function Inventory() {
                   <button
                     className="btn btn-sm btn-outline-dark me-1"
                     onClick={() => {
-                      const amount = document.getElementById(`amount-${item.id}`).value;
+                      const amount = (document.getElementById(
+                        `amount-${item.id}`
+                      ) as HTMLInputElement).value;
                       if (amount) handleAdd(item.id, amount);
                     }}
                   >
@@ -85,7 +163,9 @@ function Inventory() {
                   <button
                     className="btn btn-sm btn-outline-dark"
                     onClick={() => {
-                      const amount = document.getElementById(`amount-${item.id}`).value;
+                      const amount = (document.getElementById(
+                        `amount-${item.id}`
+                      ) as HTMLInputElement).value;
                       if (amount) handleRemove(item.id, amount);
                     }}
                   >
