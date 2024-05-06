@@ -1,12 +1,51 @@
+import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import ProductNavbar from "../components/Product/ProductNavbar";
 import ProductPageCards from "../components/Product/ProductPageCards";
+import { getProducts } from "../service/apiFacade";
 import testCards from "../tests/testProductCardInfo";
 
-function Product() {
+// Interface for Product properties
+interface ProductProps {
+    id: number;
+    name: string;
+    price: number;
+    image: string;
+    qty: number;
+    onSale: boolean;
+    discountPrice: number;
+    category: string;
+}
+
+function ProductPage() {
+    // State for products
+    const [products, setProducts] = useState<ProductProps[]>([]);
+
+    // Test cards for not yet implemented props
+    const testCardsImages = testCards.map((card) => card.imgSrc);
+    const testCardsCategory = testCards.map((card) => card.category);
+    // console.log(testCardsImages);
+
+    // Fetch products from API
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const productsData = await getProducts();
+                setProducts(productsData);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
     return (
         <>
             <div className="container-fluid">
                 {/* Brug container-fluid for at fjerne begrænsningerne af containeren */}
+
+                {/* Mulig ændring kan laves gennem Image Overlays */}
+                {/* https://getbootstrap.com/docs/5.3/components/card/#image-overlays */}
                 {/* Første sektion med billedet */}
                 <div className="row">
                     <div className="col position-relative p-0">
@@ -20,7 +59,7 @@ function Product() {
                         <div className="position-absolute top-0 end-0 p-0 d-none d-md-block">
                             {/* d-none d-md-block skjuler teksten på mindre skærme */}
 
-                            <div className="row" style={{ height: "calc(9/21 * 90vw" }}>
+                            <div className="row mx-0" style={{ height: "calc(9/21 * 90vw" }}>
                                 <div className="col"></div>
                                 <div className="col my-auto text-end" style={{ marginRight: "8rem" }}>
                                     <h1>Smukke Smykker</h1>
@@ -58,14 +97,24 @@ function Product() {
 
                 {/* Område til productcards */}
                 <div className="row row-gap-3 gap-0" style={{ marginBottom: "10rem" }}>
-                    {testCards.map((card, index) => (
-                        <div className="col-6 col-sm-6 col-md-4 col-lg-3 px-2" key={index}>
-                            <ProductPageCards
-                                cardTitle={card.title}
-                                cardDescription={card.description}
-                                cardImgSrc={card.imgSrc}
-                                cardPrice={card.price}
-                            />
+                    {products.map((product, index) => (
+                        <div className="col-6 col-sm-6 col-md-4 col-lg-3 px-2" key={product.id}>
+                            <NavLink to={`/product/${product.id}`} className="link-underline link-underline-opacity-0">
+                                <ProductPageCards
+                                    cardName={product.name}
+                                    cardPrice={product.price}
+                                    // =============
+                                    // CHANGE CARD IMAGE BACK TO product.image WHEN API IS WORKING
+                                    // cardImage={product.image}
+                                    cardImage={testCardsImages[index]}
+                                    cardQty={product.qty}
+                                    cardOnSale={product.onSale}
+                                    cardDiscountPrice={product.discountPrice}
+                                    // =============
+                                    // cardCategory={product.category}
+                                    cardCategory={testCardsCategory[index]}
+                                />
+                            </NavLink>
                         </div>
                     ))}
                 </div>
@@ -74,4 +123,4 @@ function Product() {
     );
 }
 
-export default Product;
+export default ProductPage;

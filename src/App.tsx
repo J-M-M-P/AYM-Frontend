@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import Layout from "./components/Layout";
-import Product from "./pages/Product";
+import ProductPage from "./pages/ProductPage";
 import Basket from "./pages/Basket";
 import MyPage from "./pages/MyPage";
 import Inventory from "./pages/Inventory";
@@ -14,7 +14,7 @@ function App() {
             <Layout>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/shop" element={<Product />} />
+                    <Route path="/shop" element={<ProductPage />} />
                     <Route path="*" element={<NoPage />} />
                     <Route path="/basket" element={<Basket />} />
                     <Route path="/mypage" element={<MyPage />} />
