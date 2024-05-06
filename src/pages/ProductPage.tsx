@@ -14,6 +14,8 @@ interface ProductProps {
     qty: number;
     onSale: boolean;
     discountPrice: number;
+    description: string;
+    category: string;
 }
 
 function ProductPage() {
@@ -23,8 +25,8 @@ function ProductPage() {
     // Test cards for not yet implemented props
     const testCardsImages = testCards.map((card) => card.imgSrc);
     const testCardsDiscription = testCards.map((card) => card.description);
-
-    console.log(testCardsImages);
+    const testCardsCategory = testCards.map((card) => card.category);
+    // console.log(testCardsImages);
 
     // Fetch products from API
     useEffect(() => {
@@ -56,7 +58,7 @@ function ProductPage() {
                         <div className="position-absolute top-0 end-0 p-0 d-none d-md-block">
                             {/* d-none d-md-block skjuler teksten på mindre skærme */}
 
-                            <div className="row" style={{ height: "calc(9/21 * 90vw" }}>
+                            <div className="row mx-0" style={{ height: "calc(9/21 * 90vw" }}>
                                 <div className="col"></div>
                                 <div className="col my-auto text-end" style={{ marginRight: "8rem" }}>
                                     <h1>Smukke Smykker</h1>
@@ -99,14 +101,18 @@ function ProductPage() {
                             <ProductPageCards
                                 cardName={product.name}
                                 cardPrice={product.price}
+                                // =============
+                                // CHANGE CARD IMAGE BACK TO product.image WHEN API IS WORKING
                                 // cardImage={product.image}
                                 cardImage={testCardsImages[index]}
-                                // CHANGE CARD IMAGE BACK TO product.image WHEN API IS WORKING
                                 cardQty={product.qty}
                                 cardOnSale={product.onSale}
                                 cardDiscountPrice={product.discountPrice}
+                                // =============
+                                // cardDescription={product.description}
                                 cardDescription={testCardsDiscription[index]}
-                                cardCategory="Not yet implemented"
+                                // cardCategory={product.category}
+                                cardCategory={testCardsCategory[index]}
                             />
                         </div>
                     ))}
