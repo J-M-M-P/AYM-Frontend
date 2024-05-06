@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import ProductNavbar from "../components/Product/ProductNavbar";
 import ProductPageCards from "../components/Product/ProductPageCards";
-// import testCards from "../tests/testProductCardInfo";
 import { getProducts } from "../service/apiFacade";
 import testCards from "../tests/testProductCardInfo";
 
@@ -14,7 +14,6 @@ interface ProductProps {
     qty: number;
     onSale: boolean;
     discountPrice: number;
-    description: string;
     category: string;
 }
 
@@ -24,7 +23,6 @@ function ProductPage() {
 
     // Test cards for not yet implemented props
     const testCardsImages = testCards.map((card) => card.imgSrc);
-    const testCardsDiscription = testCards.map((card) => card.description);
     const testCardsCategory = testCards.map((card) => card.category);
     // console.log(testCardsImages);
 
@@ -45,6 +43,9 @@ function ProductPage() {
         <>
             <div className="container-fluid">
                 {/* Brug container-fluid for at fjerne begrænsningerne af containeren */}
+
+                {/* Mulig ændring kan laves gennem Image Overlays */}
+                {/* https://getbootstrap.com/docs/5.3/components/card/#image-overlays */}
                 {/* Første sektion med billedet */}
                 <div className="row">
                     <div className="col position-relative p-0">
@@ -98,22 +99,22 @@ function ProductPage() {
                 <div className="row row-gap-3 gap-0" style={{ marginBottom: "10rem" }}>
                     {products.map((product, index) => (
                         <div className="col-6 col-sm-6 col-md-4 col-lg-3 px-2" key={product.id}>
-                            <ProductPageCards
-                                cardName={product.name}
-                                cardPrice={product.price}
-                                // =============
-                                // CHANGE CARD IMAGE BACK TO product.image WHEN API IS WORKING
-                                // cardImage={product.image}
-                                cardImage={testCardsImages[index]}
-                                cardQty={product.qty}
-                                cardOnSale={product.onSale}
-                                cardDiscountPrice={product.discountPrice}
-                                // =============
-                                // cardDescription={product.description}
-                                cardDescription={testCardsDiscription[index]}
-                                // cardCategory={product.category}
-                                cardCategory={testCardsCategory[index]}
-                            />
+                            <NavLink to={`/product/${product.id}`} className="link-underline link-underline-opacity-0">
+                                <ProductPageCards
+                                    cardName={product.name}
+                                    cardPrice={product.price}
+                                    // =============
+                                    // CHANGE CARD IMAGE BACK TO product.image WHEN API IS WORKING
+                                    // cardImage={product.image}
+                                    cardImage={testCardsImages[index]}
+                                    cardQty={product.qty}
+                                    cardOnSale={product.onSale}
+                                    cardDiscountPrice={product.discountPrice}
+                                    // =============
+                                    // cardCategory={product.category}
+                                    cardCategory={testCardsCategory[index]}
+                                />
+                            </NavLink>
                         </div>
                     ))}
                 </div>
