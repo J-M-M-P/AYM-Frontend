@@ -59,7 +59,7 @@ function ProductPage() {
                         <div className="position-absolute top-0 end-0 p-0 d-none d-md-block">
                             {/* d-none d-md-block skjuler teksten på mindre skærme */}
 
-                            <div className="row mx-0" style={{ height: "calc(9/21 * 90vw" }}>
+                            <div className="row mx-0" style={{ height: "calc(3/8 * 90vw" }}>
                                 <div className="col"></div>
                                 <div className="col my-auto text-end" style={{ marginRight: "8rem" }}>
                                     <h1>Smukke Smykker</h1>
@@ -77,7 +77,7 @@ function ProductPage() {
             </div>
 
             {/* Ny container til næste sektion */}
-            <div className="container" style={{ marginTop: "calc(9/21 * 105vw)" }}>
+            <div className="container" style={{ marginTop: "calc(3/8 * 105vw)" }}>
                 {/* marginTop er sat til 9/21 dele af bredden på billedet, */}
                 {/* således at næste container med content kommer frem under billedet */}
 
