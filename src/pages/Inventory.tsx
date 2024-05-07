@@ -133,6 +133,11 @@ function Inventory() {
   const handleRowClick = (product: Product) => {
     setSelectedProduct(product);
     setShowModal(true);
+    setFormValues({
+      price: "",
+      discountPrice: "",
+      onSale: false,
+    });
   };
 
   const handleCloseModal = () => {
@@ -319,8 +324,10 @@ function Inventory() {
             <tr
               key={item.id}
               className="inventory-row"
+              onMouseEnter={(e) => e.currentTarget.classList.add("hover-effect")}
+              onMouseLeave={(e) => e.currentTarget.classList.remove("hover-effect")}
               onClick={() => handleRowClick(item)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", transition: "0.3s ease" }}
             >
               <td>{item.name}</td>
               <td>{item.qty}</td>
@@ -370,41 +377,70 @@ function Inventory() {
       </table>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Produkt Info</Modal.Title>
-        </Modal.Header>
+        {selectedProduct && <Modal.Title>{selectedProduct.name}</Modal.Title>}        </Modal.Header>
         <Modal.Body>
           {selectedProduct && (
             <form>
-              <div className="mb-3">
-                <label htmlFor="price" className="form-label">
-                  Salgspris
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="price"
-                  name="price"
-                  value={formValues.price}
-                  onChange={handleFormChange}
-                />
+              <div className="row mb-3">
+                <div className="col">
+                  <label htmlFor="currentPrice" className="form-label">
+                    Nuværende salgspris
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="currentPrice"
+                    name="currentPrice"
+                    value={selectedProduct.price}
+                    readOnly
+                  />
+                </div>
+                <div className="col">
+                  <label htmlFor="price" className="form-label">
+                    Ny salgspris
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="price"
+                    name="price"
+                    value={formValues.price}
+                    onChange={handleFormChange}
+                  />
+                </div>
               </div>
-              <div className="mb-3">
-                <label htmlFor="discountPrice" className="form-label">
-                  Tilbudspris
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="discountPrice"
-                  name="discountPrice"
-                  value={formValues.discountPrice}
-                  onChange={handleFormChange}
-                />
+              <div className="row mb-3">
+                <div className="col">
+                  <label htmlFor="currentDiscountPrice" className="form-label">
+                    Nuværende Tilbudspris
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="currentDiscountPrice"
+                    name="currentDiscountPrice"
+                    value={selectedProduct.discountPrice}
+                    readOnly
+                  />
+                </div>
+                <div className="col">
+                  <label htmlFor="discountPrice" className="form-label">
+                    Ny Tilbudspris
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="discountPrice"
+                    name="discountPrice"
+                    value={formValues.discountPrice}
+                    onChange={handleFormChange}
+                  />
+                </div>
               </div>
               <div className="form-check mb-3">
                 <input
                   type="checkbox"
-                  className="form-check-input"
+                  className="form-check-input, me-2"
                   id="onSale"
                   name="onSale"
                   checked={formValues.onSale}
