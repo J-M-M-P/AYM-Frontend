@@ -6,7 +6,7 @@ import { getProducts } from "../service/apiFacade";
 import testCards from "../tests/testProductCardInfo";
 
 // Interface for Product properties
-interface ProductProps {
+export interface ProductProps {
     id: number;
     name: string;
     price: number;

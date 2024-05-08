@@ -7,6 +7,7 @@ import Basket from "./pages/Basket";
 import MyPage from "./pages/MyPage";
 import Inventory from "./pages/Inventory";
 import Login from "./pages/Login";
+import ProductDetailPage from "./pages/ProductDetailPage";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/shop" element={<ProductPage />} />
+                    <Route path="/product/:productId" element={<ProductDetailPage />} />
                     <Route path="*" element={<NoPage />} />
                     <Route path="/basket" element={<Basket />} />
                     <Route path="/mypage" element={<MyPage />} />

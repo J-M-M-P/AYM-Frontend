@@ -6,11 +6,9 @@ export default function ImageSlider() {
             <div className="carousel slide" id="imageCarouselAutoPlaying" data-bs-ride="carousel">
                 <div className="carousel-inner">
                     {testImages.map((image, index) => (
-                        <>
-                            <div className={`carousel-item ${index == 0 && "active"}`}>
-                                <img src={image.imgSrc} alt="" className="d-block w-100" />
-                            </div>
-                        </>
+                        <div className={`carousel-item ${index === 0 && "active"}`} key={index}>
+                            <img src={image.imgSrc} alt="" className="d-block w-100" />
+                        </div>
                     ))}
                 </div>
                 <button
