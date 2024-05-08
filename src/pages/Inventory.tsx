@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaPlus, FaMinus, FaSortUp, FaSortDown } from "react-icons/fa";
 import { getProducts, updateInventory } from "../service/apiFacade";
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   qty: number;

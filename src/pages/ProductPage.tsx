@@ -10,12 +10,9 @@ import { ProductCategory, ProductColor, ProductSizes, ProductMaterial, ProductPr
 function ProductPage() {
     // State for products
     const [products, setProducts] = useState<ProductProps[]>([]);
-    console.log(products);
 
     // Test cards for not yet implemented props
     const testCardsImages = testCards.map((card) => card.imgSrc);
-    // const testCardsCategory = testCards.map((card) => card.category);
-    // console.log(testCardsImages);
 
     // Fetch products from API
     useEffect(() => {

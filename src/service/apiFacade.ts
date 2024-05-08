@@ -12,7 +12,7 @@ async function getProducts() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json(); // Extract JSON data from response body
-        console.log("Products:", data); // Log the fetched data
+        // console.log("Products:", data); // Log the fetched data
         return data; // Return the fetched data
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -27,9 +27,9 @@ async function getSpecificProduct(id: number) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json(); 
-        console.log("Product:", data); 
-        return data; 
+        const data = await response.json();
+        // console.log("Product:", data);
+        return data;
     } catch (error) {
         console.error("Error fetching product:", error);
         throw error;
