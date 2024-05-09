@@ -47,7 +47,8 @@ function Inventory() {
     fetchData();
   }, []);
 
-  const handleAdd = async (id: number, amount: string) => {
+  const handleAdd = async (id: number, amount: string, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     if (!amount) return; // Check if amount is empty
     const updatedProducts = products.map((item) =>
       item.id === id ? { ...item, qty: item.qty + parseInt(amount) } : item
@@ -59,8 +60,9 @@ function Inventory() {
       console.error("Error updating inventory:", error);
     }
   };
-
-  const handleRemove = async (id: number, amount: string) => {
+  
+  const handleRemove = async (id: number, amount: string, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     if (!amount) return; // Check if amount is empty
     const updatedProducts = products.map((item) =>
       item.id === id && item.qty >= parseInt(amount)
@@ -74,7 +76,7 @@ function Inventory() {
       console.error("Error updating inventory:", error);
     }
   };
-
+  
   const requestSort = (key: keyof Product) => {
     let direction = "ascending";
     if (sortConfig && sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -130,15 +132,19 @@ function Inventory() {
     }
   });
   
-  const handleRowClick = (product: Product) => {
-    setSelectedProduct(product);
-    setShowModal(true);
-    setFormValues({
-      price: "",
-      discountPrice: "",
-      onSale: false,
-    });
-  };
+ const handleRowClick = (product: Product, e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName !== "BUTTON" && target.tagName !== "INPUT") {
+      setSelectedProduct(product);
+      setShowModal(true);
+      setFormValues({
+        price: product.price.toString(),
+        discountPrice: product.discountPrice.toString(),
+        onSale: product.onSale,
+      });
+    }
+};
+
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -326,7 +332,9 @@ function Inventory() {
               className="inventory-row"
               onMouseEnter={(e) => e.currentTarget.classList.add("hover-effect")}
               onMouseLeave={(e) => e.currentTarget.classList.remove("hover-effect")}
-              onClick={() => handleRowClick(item)}
+              onClick={(e) => handleRowClick(item, e)}
+
+              
               style={{ cursor: "pointer", transition: "0.3s ease" }}
             >
               <td>{item.name}</td>
@@ -348,27 +356,30 @@ function Inventory() {
                     id={`amount-${item.id}`}
                   />
                   <button
-                    className="btn btn-sm btn-outline-dark me-1"
-                    onClick={() => {
-                      const amount = (document.getElementById(
-                        `amount-${item.id}`
-                      ) as HTMLInputElement).value;
-                      if (amount) handleAdd(item.id, amount);
-                    }}
-                  >
-                    <FaPlus />
-                  </button>
-                  <button
-                    className="btn btn-sm btn-outline-dark"
-                    onClick={() => {
-                      const amount = (document.getElementById(
-                        `amount-${item.id}`
-                      ) as HTMLInputElement).value;
-                      if (amount) handleRemove(item.id, amount);
-                    }}
-                  >
-                    <FaMinus />
-                  </button>
+  className="btn btn-sm btn-outline-dark me-1"
+  onClick={(e) => {
+    e.stopPropagation();
+    const amount = (document.getElementById(
+      `amount-${item.id}`
+    ) as HTMLInputElement).value;
+    if (amount) handleAdd(item.id, amount, e);
+  }}
+>
+  <FaPlus />
+</button>
+<button
+  className="btn btn-sm btn-outline-dark"
+  onClick={(e) => {
+    e.stopPropagation();
+    const amount = (document.getElementById(
+      `amount-${item.id}`
+    ) as HTMLInputElement).value;
+    if (amount) handleRemove(item.id, amount, e);
+  }}
+>
+  <FaMinus />
+</button>
+
                 </div>
               </td>
             </tr>
@@ -406,6 +417,7 @@ function Inventory() {
                     name="price"
                     value={formValues.price}
                     onChange={handleFormChange}
+                    required
                   />
                 </div>
               </div>
@@ -434,6 +446,7 @@ function Inventory() {
                     name="discountPrice"
                     value={formValues.discountPrice}
                     onChange={handleFormChange}
+                    required
                   />
                 </div>
               </div>
