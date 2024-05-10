@@ -6,7 +6,7 @@ import ProductPage from "./pages/ProductPage";
 import Basket from "./pages/Basket";
 import MyPage from "./pages/MyPage";
 import Inventory from "./pages/Inventory";
-import Login from "./pages/Login";
+import Login from "./security/Login";
 
 function App() {
     return (
