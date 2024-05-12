@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getSpecificProduct } from "../service/apiFacade";
 import { ProductProps } from "../service/ProductProps";
+import { getSpecificProduct } from "../service/apiFacade";
 
 function ProductDetailPage() {
+    const storedItems = JSON.parse(localStorage.getItem("cart") || "[]");
+
     const { productId } = useParams<{ productId: string }>();
     const [product, setProduct] = useState<ProductProps | null>(null);
-    const [onSale] = useState(product?.onSale || false);
+    const [cart, setCart] = useState<ProductProps[]>(storedItems);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -21,6 +23,24 @@ function ProductDetailPage() {
         fetchProduct();
     }, [productId]);
 
+    // Hent kurven fra localStorage når komponenten mounts
+    useEffect(() => {
+        const loadedCart = localStorage.getItem("cart");
+        setCart(loadedCart ? JSON.parse(loadedCart) : []);
+    }, []);
+
+    // Gem kurven til localStorage hver gang den opdateres
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
+
+    // Funktion til at tilføje produkter til kurven
+    const addToCart = (productToAdd: ProductProps) => {
+        setCart((prevCart) => [...prevCart, productToAdd]);
+    };
+
+    console.log(cart);
+
     if (!product) return <div>Loading...</div>;
 
     return (
@@ -29,8 +49,6 @@ function ProductDetailPage() {
                 <div className="row">
                     <div className="col">
                         <h5>Images</h5>
-                        {/* TODO: lav dette så det er en carousel når skærmen bliver lille */}
-                        {/* Benyt carousel men med en collapse feature */}
                         <img src={product.image} alt={product.name} />
                     </div>
                     <div className="col-lg-4 p-0">
@@ -38,14 +56,12 @@ function ProductDetailPage() {
                             <div className="card-body">
                                 <h5 className="card-title fs-3">{product.name}</h5>
                                 <p className="card-text">
-                                    {/* Lav arrays til dropdown menuer, hvis flere mulige løsning findes */}
-                                    {/* f.eks. lav dropdown hvis en ring er i flere størrelser */}
                                     {product.materials.map((material) => material.name.toUpperCase() + ", ")}
                                     {product.sizes.map((size) => size.sizeName + ", ")}
                                     {product.colors.map((color) => color.colorName + ", ")}
                                 </p>
                                 <div className="card-text">
-                                    {(onSale && (
+                                    {(product.onSale && (
                                         <div className="row">
                                             <div className="col">
                                                 <p className="my-0 text-decoration-line-through fst-italic fw-lighter">
@@ -58,12 +74,14 @@ function ProductDetailPage() {
                                         </div>
                                     )) || <p className="card-text fw-bold">DDK {product.price},00</p>}
                                 </div>
-                                <button className="btn rounded-0 w-100 btn-info">LÆG I KURV</button>
+                                <button className="btn rounded-0 w-100 btn-info" onClick={() => addToCart(product)}>
+                                    LÆG I KURV
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>{" "}
+            </div>
         </>
     );
 }
