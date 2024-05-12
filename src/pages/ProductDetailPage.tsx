@@ -1,14 +1,17 @@
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ProductProps } from "../service/ProductProps";
 import { getSpecificProduct } from "../service/apiFacade";
 
 function ProductDetailPage() {
-    const storedItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    // Hent kurven fra localStorage
+    const storedItems = JSON.parse(localStorage.getItem("basket") || "[]");
+    console.log(storedItems);
 
     const { productId } = useParams<{ productId: string }>();
     const [product, setProduct] = useState<ProductProps | null>(null);
-    const [cart, setCart] = useState<ProductProps[]>(storedItems);
+    // State for kurv
+    const [basket, setBasket] = useState<ProductProps[]>(storedItems);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -25,21 +28,19 @@ function ProductDetailPage() {
 
     // Hent kurven fra localStorage når komponenten mounts
     useEffect(() => {
-        const loadedCart = localStorage.getItem("cart");
-        setCart(loadedCart ? JSON.parse(loadedCart) : []);
+        const loadedCart = localStorage.getItem("basket");
+        setBasket(loadedCart ? JSON.parse(loadedCart) : []);
     }, []);
 
     // Gem kurven til localStorage hver gang den opdateres
     useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(cart));
-    }, [cart]);
+        localStorage.setItem("basket", JSON.stringify(basket));
+    }, [basket]);
 
     // Funktion til at tilføje produkter til kurven
-    const addToCart = (productToAdd: ProductProps) => {
-        setCart((prevCart) => [...prevCart, productToAdd]);
+    const addToBasket = (productToAdd: ProductProps) => {
+        setBasket((prevBasket) => [...prevBasket, productToAdd]);
     };
-
-    console.log(cart);
 
     if (!product) return <div>Loading...</div>;
 
@@ -74,9 +75,13 @@ function ProductDetailPage() {
                                         </div>
                                     )) || <p className="card-text fw-bold">DDK {product.price},00</p>}
                                 </div>
-                                <button className="btn rounded-0 w-100 btn-info" onClick={() => addToCart(product)}>
+                                <button className="btn rounded-0 w-100 btn-info" onClick={() => addToBasket(product)}>
                                     LÆG I KURV
                                 </button>
+                                <NavLink to="/basket" className="btn rounded-0 w-100 btn-info mt-1">
+                                    {" "}
+                                    GÅ TIL KURV
+                                </NavLink>
                             </div>
                         </div>
                     </div>
