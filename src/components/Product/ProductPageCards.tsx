@@ -37,17 +37,17 @@ function ProductPageCards({
                 <div className="card border border-0 " style={{ height: "400px" }}>
                     {onSale && (
                         <div
-                            className="position-absolute header text-center"
+                            className="position-absolute header text-center opacity-75"
                             style={{ backgroundColor: "green", width: "100%" }}
                         >
-                            <span className="fs-1">Sale</span>
+                            <span className="fs-1 fst-italic">Sale</span>
                         </div>
                     )}
                     <img
                         src={cardImage}
-                        className="card-img-top rounded-0"
+                        className="card-img-top rounded-0 object-fit-cover "
                         alt={cardName}
-                        style={{ height: "250px", objectFit: "cover" }}
+                        style={{ height: "250px", width: "auto" }}
                     />
                     <div className="card-body pb-0">
                         <h5 className="card-title">{cardName}</h5>
@@ -58,11 +58,13 @@ function ProductPageCards({
                         <p className="card-text">Materialer: {displayArray(cardMaterials)}</p>
 
                         {(onSale && (
-                            <div className="row row-col-3">
-                                <div className="col">
+                            <div className="row">
+                                <div className="col p-0">
                                     <p className="my-0 text-decoration-line-through fst-italic fw-lighter">
                                         DKK {cardPrice},00
                                     </p>
+                                </div>
+                                <div className="col p-0">
                                     <p className="my-0 fw-bold">DDK {cardPrice - discountPrice},00</p>
                                 </div>
                             </div>
