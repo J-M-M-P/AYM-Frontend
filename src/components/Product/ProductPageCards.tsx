@@ -34,7 +34,7 @@ function ProductPageCards({
     return (
         <>
             <div className="col">
-                <div className="card border border-0 " style={{ height: "400px" }}>
+                <div className="card border border-0" style={{ height: "400px" }}>
                     {onSale && (
                         <div
                             className="position-absolute header text-center opacity-75"

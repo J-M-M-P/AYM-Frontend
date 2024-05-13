@@ -36,31 +36,12 @@ function ProductPage() {
 
     return (
         <>
-            {/* Showcase iamge with text component */}
-            {/* <TopImageWithText /> */}
-
-            {/* Ny container til næste sektion */}
-            {/* style={{ marginTop: "calc(3/8 * 102vw)" }} */}
             <div className="container">
-                {/* marginTop er sat til 9/21 dele af bredden på billedet, */}
-                {/* således at næste container med content kommer frem under billedet */}
-
-                {/* <div className="row d-sm-block d-md-none">
-                    <div className="col text-center">
-                        <h5 className="fs-4">Smukke Smykker</h5>
-                        <p className="" style={{ fontSize: "14px" }}>
-                            Med en sublim blanding af æstetik og håndværk inviterer vores smykker dig ind i en verden af
-                            tidsløs elegance og personlig stil. Hvert stykke er nøje udformet med en forfinet sans for
-                            detaljer og en lidenskab for at skabe unikke kunstværker, der udstråler skønhed og karakter.
-                        </p>
-                    </div>
-                </div> */}
-
                 {/* Sort/filter navbar */}
                 <ProductNavbar />
 
                 {/* Område til productcards */}
-                <div className="row row-gap-3 gap-0" style={{ marginBottom: "10rem" }}>
+                <div className="row row-gap-3 gap-0 " style={{ marginBottom: "10rem" }}>
                     {products.map((product, index) => (
                         <div className="col-6 col-sm-6 col-md-4 col-lg-3 px-2" key={product.id}>
                             <NavLink to={`/product/${product.id}`} className="link-underline link-underline-opacity-0">
