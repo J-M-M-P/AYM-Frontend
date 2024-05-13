@@ -6,7 +6,8 @@ import ProductPage from "./pages/ProductPage";
 import Basket from "./pages/Basket";
 import MyPage from "./pages/MyPage";
 import Inventory from "./pages/Inventory";
-import Login from "./pages/Login";
+import Login from "./security/Login";
+import RequireAuth from "./security/RequireAuth";
 
 function App() {
     return (
@@ -18,7 +19,14 @@ function App() {
                     <Route path="*" element={<NoPage />} />
                     <Route path="/basket" element={<Basket />} />
                     <Route path="/mypage" element={<MyPage />} />
-                    <Route path="/inventory" element={<Inventory />} />
+                    <Route
+                        path="/inventory"
+                        element={
+                            <RequireAuth roles={["ADMIN"]}>
+                                <Inventory />
+                            </RequireAuth>
+                        }
+                    />
                     <Route path="/login" element={<Login />} />
                 </Routes>
             </Layout>
