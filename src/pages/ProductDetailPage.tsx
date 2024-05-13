@@ -2,11 +2,12 @@ import { NavLink, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ProductProps } from "../service/ProductProps";
 import { getSpecificProduct } from "../service/apiFacade";
+import testCards from "../tests/testProductCardInfo";
 
 function ProductDetailPage() {
     // Hent kurven fra localStorage
     const storedItems = JSON.parse(localStorage.getItem("basket") || "[]");
-    console.log(storedItems);
+    // console.log(storedItems);
 
     const { productId } = useParams<{ productId: string }>();
     const [product, setProduct] = useState<ProductProps | null>(null);
@@ -45,49 +46,76 @@ function ProductDetailPage() {
     if (!product) return <div>Loading...</div>;
 
     return (
-        <>
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col">
-                        <h5>Images</h5>
-                        <img src={product.image} alt={product.name} />
-                    </div>
-                    <div className="col-lg-4 p-0">
-                        <div className="card rounded-0 px-4" style={{ paddingTop: "54px" }}>
-                            <div className="card-body">
-                                <h5 className="card-title fs-3">{product.name}</h5>
-                                <p className="card-text">
-                                    {product.materials.map((material) => material.name.toUpperCase() + ", ")}
-                                    {product.sizes.map((size) => size.sizeName + ", ")}
-                                    {product.colors.map((color) => color.colorName + ", ")}
-                                </p>
-                                <div className="card-text">
-                                    {(product.onSale && (
-                                        <div className="row">
-                                            <div className="col">
-                                                <p className="my-0 text-decoration-line-through fst-italic fw-lighter">
-                                                    DKK {product.price},00
-                                                </p>
-                                                <p className="my-0 fw-bold">
-                                                    DDK {product.price - product.discountPrice},00
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )) || <p className="card-text fw-bold">DDK {product.price},00</p>}
-                                </div>
-                                <button className="btn rounded-0 w-100 btn-info" onClick={() => addToBasket(product)}>
-                                    LÆG I KURV
-                                </button>
-                                <NavLink to="/basket" className="btn rounded-0 w-100 btn-info mt-1">
-                                    {" "}
-                                    GÅ TIL KURV
-                                </NavLink>
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col-md-8 my-3 px-3">
+                    {/* Indsæt istedet billeder fra backend */}
+                    {/* Implementer at det bliver en carousel ved md eller mindre skærm forhold */}
+                    {testCards.map((image, index) => (
+                        <img
+                            key={index}
+                            src={image.imgSrc}
+                            alt={product.name}
+                            className="img-fluid object-fit-cover "
+                            style={{ width: "50%", height: "calc(1/3 * 100vw)" }}
+                        />
+                    ))}
+                </div>
+                <div className="col-md-4 ps-0 py-5">
+                    <div className="card h-100 border-0">
+                        <div className="card-body">
+                            {/* Beskrivelse af produkt materiale og farve */}
+                            <p className="card-text playfair-display-font mb-0 mt-2" style={{ fontSize: "15px" }}>
+                                {product.materials.map((material) => `${material.name.toUpperCase()} `)}
+                            </p>
+                            {/* Overskrift */}
+                            <h5
+                                className="card-title noto-serif-jp-semibold mt-3"
+                                style={{ fontSize: "25px", marginBottom: "2.5rem" }}
+                            >
+                                {product.name}
+                            </h5>
+                            {/* Product farve*/}
+                            <p className="card-text quicksand-font-btn mt-0 mb-1" style={{ fontSize: "14px" }}>
+                                {product.colors.map((color) => `${color.colorName} `)}
+                            </p>
+
+                            {/* Dropdowns for forskellige muligheder */}
+                            <p className="card-text">{product.sizes.map((size) => `${size.sizeName}, `)}</p>
+
+                            <div className="lora-font">
+                                {product.onSale ? (
+                                    <div>
+                                        <p className="text-decoration-line-through">DKK {product.price},00</p>
+                                        <p>DDK {product.price - product.discountPrice},00</p>
+                                    </div>
+                                ) : (
+                                    <p>DDK {product.price},00</p>
+                                )}
                             </div>
+
+                            {/* Link til breadcrums for eventuel notification af ting i kurv */}
+                            {/* https://getbootstrap.com/docs/5.3/components/badge/#buttons */}
+
+                            <button
+                                className="btn w-100"
+                                style={{ backgroundColor: "#BDB4BF", fontFamily: "Lora", fontWeight: "500" }}
+                                onClick={() => addToBasket(product)}
+                            >
+                                LÆG I KURV
+                            </button>
+                            <NavLink
+                                to="/basket"
+                                className="btn w-100 mt-2"
+                                style={{ backgroundColor: "#0DCAF0", fontFamily: "Lora", fontWeight: "500" }}
+                            >
+                                GÅ TIL KURV
+                            </NavLink>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
