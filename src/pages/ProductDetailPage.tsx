@@ -1,5 +1,6 @@
 import { NavLink, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Alert } from "react-bootstrap";
 import { ProductProps } from "../service/ProductProps";
 import { getSpecificProduct } from "../service/apiFacade";
 import testCards from "../tests/testProductCardInfo";
@@ -13,6 +14,7 @@ function ProductDetailPage() {
     const [product, setProduct] = useState<ProductProps | null>(null);
     // State for kurv
     const [basket, setBasket] = useState<ProductProps[]>(storedItems);
+    const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -40,7 +42,13 @@ function ProductDetailPage() {
 
     // Funktion til at tilføje produkter til kurven
     const addToBasket = (productToAdd: ProductProps) => {
-        setBasket((prevBasket) => [...prevBasket, productToAdd]);
+        const timestamp = Date.now(); // Generer en unik timestamp for hver tilføjelse
+        const productWithId = { ...productToAdd, uniqueId: timestamp }; // Tilføj timestamp til produktet
+        setBasket((prevBasket) => [...prevBasket, productWithId]);
+        setShowAlert(true);
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 2000); // Skjul alert efter 2 sekunder
     };
 
     if (!product) return <div>Loading...</div>;
@@ -96,7 +104,7 @@ function ProductDetailPage() {
 
                             {/* Link til breadcrums for eventuel notification af ting i kurv */}
                             {/* https://getbootstrap.com/docs/5.3/components/badge/#buttons */}
-
+                            {showAlert && <Alert variant="success">Produktet er lagt i kurven!</Alert>}
                             <button
                                 className="btn w-100"
                                 style={{ backgroundColor: "#BDB4BF", fontFamily: "Lora", fontWeight: "500" }}

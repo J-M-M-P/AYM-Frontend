@@ -26,6 +26,7 @@ export interface ProductMaterial {
 
 export interface ProductProps {
     id: number;
+    uniqueId?: number;
     name: string;
     price: number;
     image: string;

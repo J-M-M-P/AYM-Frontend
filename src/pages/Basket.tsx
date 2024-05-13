@@ -20,7 +20,7 @@ function Basket() {
 
     // Funktion til at fjerne et produkt fra kurven
     const removeFromBasket = (productId: number) => {
-        const updatedBasketItems = basketItems.filter((item) => item.id !== productId);
+        const updatedBasketItems = basketItems.filter((item) => item.uniqueId !== productId);
         setBasketItems(updatedBasketItems);
         localStorage.setItem("basket", JSON.stringify(updatedBasketItems));
     };
@@ -31,9 +31,9 @@ function Basket() {
             {basketItems.length > 0 ? (
                 <ul>
                     {basketItems.map((item) => (
-                        <li key={item.id}>
+                        <li key={item.uniqueId}>
                             {item.name} - DKK {item.price},00
-                            <button onClick={() => removeFromBasket(item.id)}>Fjern</button>
+                            <button onClick={() => removeFromBasket(Number(item.uniqueId))}>Fjern</button>
                         </li>
                     ))}
                 </ul>
