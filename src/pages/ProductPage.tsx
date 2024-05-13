@@ -4,8 +4,8 @@ import ProductNavbar from "../components/Product/ProductNavbar";
 import ProductPageCards from "../components/Product/ProductPageCards";
 import { getProducts } from "../service/apiFacade";
 import testCards from "../tests/testProductCardInfo";
-import TopImageWithText from "../components/Product/TopImageWithText";
 import { ProductCategory, ProductColor, ProductSizes, ProductMaterial, ProductProps } from "../service/ProductProps.ts";
+// import TopImageWithText from "../components/Product/TopImageWithText";
 
 function ProductPage() {
     // State for products
@@ -37,14 +37,15 @@ function ProductPage() {
     return (
         <>
             {/* Showcase iamge with text component */}
-            <TopImageWithText />
+            {/* <TopImageWithText /> */}
 
             {/* Ny container til næste sektion */}
-            <div className="container" style={{ marginTop: "calc(3/8 * 102vw)" }}>
+            {/* style={{ marginTop: "calc(3/8 * 102vw)" }} */}
+            <div className="container">
                 {/* marginTop er sat til 9/21 dele af bredden på billedet, */}
                 {/* således at næste container med content kommer frem under billedet */}
 
-                <div className="row d-sm-block d-md-none">
+                {/* <div className="row d-sm-block d-md-none">
                     <div className="col text-center">
                         <h5 className="fs-4">Smukke Smykker</h5>
                         <p className="" style={{ fontSize: "14px" }}>
@@ -53,7 +54,7 @@ function ProductPage() {
                             detaljer og en lidenskab for at skabe unikke kunstværker, der udstråler skønhed og karakter.
                         </p>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Sort/filter navbar */}
                 <ProductNavbar />

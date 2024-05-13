@@ -5,7 +5,7 @@ function ProductNavbar() {
     return (
         <>
             {/* Filter Dropdowns & Off canvas menu when, width < navbar-expand-md */}
-            <div className="row mb-2 px-3">
+            <div className="row my-4 px-3">
                 <div className="col px-0">
                     <nav className="navbar navbar-expand-md py-0 h-100">
                         <button
