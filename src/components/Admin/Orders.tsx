@@ -5,13 +5,19 @@ interface Order {
   ordrenummer: number;
   kundenummer: number;
   afsendt: boolean;
-  products: Product[];
+  products: OrderedProduct[];
+}
+
+interface OrderedProduct {
+  product: Product;
+  quantity: number;
 }
 
 interface Product {
   name: string;
-  quantity: number;
   price: number;
+  discountPrice?: number;
+  onSale?: boolean;
 }
 
 function Orders() {
@@ -24,30 +30,64 @@ function Orders() {
   ];
 
   // Dummy data for products
-  const products = [
+  const products: Product[] = [
     {
       name: "ANABELLE",
       price: 450,
-      quantity: 2,
+      discountPrice: 200,
+      onSale: false,
     },
     {
       name: "MATILDA",
       price: 700,
-      quantity: 1,
+      discountPrice: 550,
+      onSale: true,
     },
     {
       name: "MARTHA",
       price: 275,
-      quantity: 3,
+      discountPrice: 210,
+      onSale: true,
     },
   ];
 
   // Dummy data for orders
   const [orders, setOrders] = useState<Order[]>([
-    { ordrenummer: 12345, kundenummer: 54321, afsendt: true, products },
-    { ordrenummer: 67890, kundenummer: 98765, afsendt: false, products },
-    { ordrenummer: 24680, kundenummer: 86420, afsendt: true, products },
-    { ordrenummer: 13579, kundenummer: 97531, afsendt: false, products },
+    {
+      ordrenummer: 12345,
+      kundenummer: 54321,
+      afsendt: true,
+      products: [
+        { product: products[0], quantity: 2 },
+        { product: products[1], quantity: 1 },
+      ],
+    },
+    {
+      ordrenummer: 67890,
+      kundenummer: 98765,
+      afsendt: false,
+      products: [
+        { product: products[0], quantity: 1 },
+        { product: products[2], quantity: 3 },
+      ],
+    },
+    {
+      ordrenummer: 24680,
+      kundenummer: 86420,
+      afsendt: true,
+      products: [
+        { product: products[1], quantity: 2 },
+        { product: products[2], quantity: 1 },
+      ],
+    },
+    {
+      ordrenummer: 13579,
+      kundenummer: 97531,
+      afsendt: false,
+      products: [
+        { product: products[2], quantity: 1 },
+      ],
+    },
   ]);
 
   // Filtered orders based on search criteria
@@ -103,6 +143,16 @@ function Orders() {
 
   const closeModal = () => {
     setModalData(null);
+  };
+
+  const updateAfsendtStatus = (ordrenummer: number, checked: boolean) => {
+    const updatedOrders = orders.map((order) => {
+      if (order.ordrenummer === ordrenummer) {
+        return { ...order, afsendt: checked };
+      }
+      return order;
+    });
+    setOrders(updatedOrders);
   };
 
   return (
@@ -174,16 +224,17 @@ function Orders() {
               <div className="modal-body">
                 <div className="row">
                   <div className="col">
-                    <h5>Kundenummer</h5>
-                    {customers.map((customer, index) => (
-                      <div key={index}>
-                        <strong>{customer.kundenummer}</strong>
-                        <p>
-                          {customer.fornavn} {customer.efternavn}
-                        </p>
-                        <p>{customer.email}</p>
-                      </div>
-                    ))}
+                    <h5>Kunde</h5>
+                    <div>
+                      <h6>Kundenummer</h6>
+                      <p>{modalData.kundenummer}</p>
+                      <h6>Fornavn</h6>
+                      <p>{customers.find((customer) => customer.kundenummer === modalData.kundenummer)?.fornavn}</p>
+                      <h6>Efternavn</h6>
+                      <p>{customers.find((customer) => customer.kundenummer === modalData.kundenummer)?.efternavn}</p>
+                      <h6>Email</h6>
+                      <p>{customers.find((customer) => customer.kundenummer === modalData.kundenummer)?.email}</p>
+                    </div>
                   </div>
                   <div className="col">
                     <h5>Ordre</h5>
@@ -192,17 +243,47 @@ function Orders() {
                         <tr>
                           <th>Produkt</th>
                           <th>Antal</th>
-                          <th>Pris</th>
+                          <th>Pris pr. stk.</th>
+                          <th>Total pris</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {modalData.products.map((product, index) => (
+                        {modalData.products.map(({ product, quantity }, index) => (
                           <tr key={index}>
                             <td>{product.name}</td>
-                            <td>{product.quantity}</td>
-                            <td>{product.price}</td>
+                            <td>{quantity}</td>
+                            <td>{product.onSale ? product.discountPrice : product.price}</td>
+                            <td>{quantity * (product.onSale ? product.discountPrice : product.price)}</td>
                           </tr>
                         ))}
+                        <tr>
+                          <td colSpan={3}>Total</td>
+                          <td>
+                            {modalData.products.reduce((total, { product, quantity }) => {
+                              return total + quantity * (product.onSale ? product.discountPrice : product.price);
+                            }, 0)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={4} style={{ color: "#6c757d" }}>
+                            Heraf moms (25%):{" "}
+                            {(
+                              modalData.products.reduce((total, { product, quantity }) => {
+                                return total + quantity * (product.onSale ? product.discountPrice : product.price);
+                              }, 0) * 0.2
+                            ).toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={3}>Ordre afsendt fra lager:</td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={modalData.afsendt}
+                              onChange={(e) => updateAfsendtStatus(modalData.ordrenummer, e.target.checked)}
+                            />
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
