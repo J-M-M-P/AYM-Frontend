@@ -5,7 +5,14 @@ import B2B from "../components/Admin/B2B";
 import Orders from "../components/Admin/Orders";
 
 function Admin() {
-  const [key, setKey] = useState<string>("inventory");
+  const [selectedTab, setSelectedTab] = useState<string>(
+    localStorage.getItem("selectedTab") || "inventory"
+  );
+
+  const handleTabChange = (tab: string) => {
+    setSelectedTab(tab);
+    localStorage.setItem("selectedTab", tab);
+  };
 
   return (
     <div>
@@ -28,8 +35,8 @@ function Admin() {
       </style>
       <Tabs
         id="controlled-tab-example"
-        activeKey={key}
-        onSelect={(k) => k && setKey(k)}
+        activeKey={selectedTab}
+        onSelect={(k) => handleTabChange(k)}
         className="mb-3"
         variant="pills"
       >
@@ -40,7 +47,7 @@ function Admin() {
           <B2B />
         </Tab>
         <Tab eventKey="orders" title="Ordrer">
-          <Orders />
+          <Orders setSelectedTab={setSelectedTab} />
         </Tab>
       </Tabs>
     </div>

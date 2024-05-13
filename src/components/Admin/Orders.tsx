@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaCheck, FaSort, FaSortDown, FaSortUp, FaTimes } from "react-icons/fa";
 
 interface Order {
@@ -93,12 +93,23 @@ function Orders() {
   // Filtered orders based on search criteria
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  
+  // Selected tab
+  const [selectedTab, setSelectedTab] = useState<string>("Lager");
 
   // Sort configurations for each column
   const [sortConfig, setSortConfig] = useState<{ key: keyof Order; direction: string }>({
     key: "ordrenummer",
     direction: "ascending",
   });
+
+  useEffect(() => {
+    // Load selected tab from localStorage if exists
+    const storedTab = localStorage.getItem("selectedTab");
+    if (storedTab) {
+      setSelectedTab(storedTab);
+    }
+  }, []);
 
   const requestSort = (key: keyof Order) => {
     let direction = "ascending";
@@ -136,24 +147,31 @@ function Orders() {
   });
 
   const [modalData, setModalData] = useState<Order | null>(null);
+  const [isAfsendtChecked, setIsAfsendtChecked] = useState<boolean>(false);
 
   const openModal = (order: Order) => {
     setModalData(order);
+    setIsAfsendtChecked(order.afsendt);
   };
 
   const closeModal = () => {
     setModalData(null);
   };
 
-  const updateAfsendtStatus = (ordrenummer: number, checked: boolean) => {
+  const updateAfsendtStatus = (ordrenummer: number) => {
     const updatedOrders = orders.map((order) => {
       if (order.ordrenummer === ordrenummer) {
-        return { ...order, afsendt: checked };
+        return { ...order, afsendt: isAfsendtChecked };
       }
       return order;
     });
     setOrders(updatedOrders);
   };
+
+  useEffect(() => {
+    // Save selected tab to localStorage
+    localStorage.setItem("selectedTab", selectedTab);
+  }, [selectedTab]);
 
   return (
     <div>
@@ -205,7 +223,13 @@ function Orders() {
         <tbody>
           {sortedOrders.map((order, index) => (
             <tr key={index}>
-              <td onClick={() => openModal(order)}>{order.ordrenummer}</td>
+              <td
+                onClick={() => openModal(order)}
+                onMouseEnter={(e) => e.currentTarget.classList.add("hover-effect")}
+                onMouseLeave={(e) => e.currentTarget.classList.remove("hover-effect")}
+              >
+                {order.ordrenummer}
+              </td>
               <td>{order.kundenummer}</td>
               <td>{order.afsendt ? <FaCheck /> : <FaTimes />}</td>
             </tr>
@@ -224,7 +248,7 @@ function Orders() {
               <div className="modal-body">
                 <div className="row">
                   <div className="col">
-                    <h5>Kunde</h5>
+                    <h5 style={{ textDecorationLine: "underline" }}>Kunde</h5>
                     <div>
                       <h6>Kundenummer</h6>
                       <p>{modalData.kundenummer}</p>
@@ -237,7 +261,7 @@ function Orders() {
                     </div>
                   </div>
                   <div className="col">
-                    <h5>Ordre</h5>
+                    <h5 style={{ textDecorationLine: "underline" }}>Ordre</h5>
                     <table className="table">
                       <thead>
                         <tr>
@@ -251,9 +275,9 @@ function Orders() {
                         {modalData.products.map(({ product, quantity }, index) => (
                           <tr key={index}>
                             <td>{product.name}</td>
-                            <td>{quantity}</td>
-                            <td>{product.onSale ? product.discountPrice : product.price}</td>
-                            <td>{quantity * (product.onSale ? product.discountPrice : product.price)}</td>
+                            <td>{quantity} stk.</td>
+                            <td>{product.onSale ? product.discountPrice : product.price} kr.</td>
+                            <td>{quantity * (product.onSale ? product.discountPrice : product.price)} kr.</td>
                           </tr>
                         ))}
                         <tr>
@@ -261,7 +285,7 @@ function Orders() {
                           <td>
                             {modalData.products.reduce((total, { product, quantity }) => {
                               return total + quantity * (product.onSale ? product.discountPrice : product.price);
-                            }, 0)}
+                            }, 0)} kr.
                           </td>
                         </tr>
                         <tr>
@@ -271,17 +295,37 @@ function Orders() {
                               modalData.products.reduce((total, { product, quantity }) => {
                                 return total + quantity * (product.onSale ? product.discountPrice : product.price);
                               }, 0) * 0.2
-                            ).toFixed(2)}
+                            ).toFixed(2)} kr.
                           </td>
                         </tr>
                         <tr>
-                          <td colSpan={3}>Ordre afsendt fra lager:</td>
-                          <td>
-                            <input
-                              type="checkbox"
-                              checked={modalData.afsendt}
-                              onChange={(e) => updateAfsendtStatus(modalData.ordrenummer, e.target.checked)}
-                            />
+                          <td colSpan={4}>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input, me-2"
+                                type="checkbox"
+                                id="afsendtCheckbox"
+                                checked={isAfsendtChecked}
+                                onChange={() => setIsAfsendtChecked(!isAfsendtChecked)}
+                              />
+                              <label className="form-check-label" htmlFor="afsendtCheckbox">
+                                Ordre afsendt fra lager
+                              </label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan={4}>
+                            <button
+                              type="button"
+                              className="btn btn-dark"
+                              onClick={() => {
+                                updateAfsendtStatus(modalData.ordrenummer);
+                                closeModal();
+                              }}
+                            >
+                              Opdater
+                            </button>
                           </td>
                         </tr>
                       </tbody>
