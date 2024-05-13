@@ -5,7 +5,7 @@ import Layout from "./components/Layout";
 import ProductPage from "./pages/ProductPage";
 import Basket from "./pages/Basket";
 import MyPage from "./pages/MyPage";
-import Inventory from "./pages/Inventory";
+import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
                     <Route path="*" element={<NoPage />} />
                     <Route path="/basket" element={<Basket />} />
                     <Route path="/mypage" element={<MyPage />} />
-                    <Route path="/inventory" element={<Inventory />} />
+                    <Route path="/admin" element={<Admin />} />
                     <Route path="/login" element={<Login />} />
                 </Routes>
             </Layout>
