@@ -5,7 +5,9 @@ import ProductPageCards from "../components/Product/ProductPageCards";
 import { getProducts } from "../service/apiFacade";
 import testCards from "../tests/testProductCardInfo";
 import { ProductCategory, ProductColor, ProductSizes, ProductMaterial, ProductProps } from "../service/ProductProps.ts";
-// import TopImageWithText from "../components/Product/TopImageWithText";
+
+// CSS
+import "../components/Product/ProductPage.css";
 
 function ProductPage() {
     // State for products
@@ -36,14 +38,14 @@ function ProductPage() {
 
     return (
         <>
-            <div className="container">
+            <div className="container ">
                 {/* Sort/filter navbar */}
                 <ProductNavbar />
 
                 {/* Område til productcards */}
                 <div className="row row-gap-3 gap-0 " style={{ marginBottom: "10rem" }}>
                     {products.map((product, index) => (
-                        <div className="col-6 col-sm-6 col-md-4 col-lg-3 px-2" key={product.id}>
+                        <div className="col-6 col-sm-6 col-md-4 col-lg-3 px-1 " key={product.id}>
                             <NavLink to={`/product/${product.id}`} className="link-underline link-underline-opacity-0">
                                 <ProductPageCards
                                     cardName={product.name}
