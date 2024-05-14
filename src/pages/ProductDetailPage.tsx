@@ -42,7 +42,7 @@ function ProductDetailPage() {
 
     // Funktion til at tilføje produkter til kurven
     const addToBasket = (productToAdd: ProductProps) => {
-        const timestamp = Date.now(); // Generer en unik timestamp for hver tilføjelse
+        const timestamp = String(Date.now()); // Generer en unik timestamp for hver tilføjelse
         const productWithId = { ...productToAdd, uniqueId: timestamp }; // Tilføj timestamp til produktet
         setBasket((prevBasket) => [...prevBasket, productWithId]);
         setShowAlert(true);
