@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { ProductProps } from "../service/ProductProps";
 //css
 import "../components/Product/ProductPage.css";
-import "../components/Product/Basket.css";
 
 interface GroupedProductProps extends ProductProps {
     quantity: number;
@@ -75,10 +74,10 @@ function Basket() {
     return (
         <div className="container">
             <div className="row">
-                <h1 className="text-center mt-5 mb-4">Kurv</h1>
+                <h1 className="text-center mt-5 mb-4 playfair-display-font">Kurv</h1>
             </div>
 
-            <hr />
+            <hr className="mb-0" />
             <div className="row">
                 {/* Producter */}
                 {/* <h4 className="text-center">Valgte produkter</h4> */}
@@ -86,42 +85,65 @@ function Basket() {
                     <div className="col-md-12">
                         {basketItems.map((item) => (
                             <div className="card border-0 border-bottom rounded-0" key={item.id}>
-                                <div className="row g-0">
+                                <div className="row g-0 my-5">
                                     <div className="col-md-2">
                                         <img src={item.image} alt={item.name} className="img-fluid" />
                                     </div>
                                     <div className="col-md-6">
                                         <div className="card-body">
-                                            <h5 className="card-title">{item.name}</h5>
-                                            <p className="card-text">
+                                            <h5
+                                                className="card-title quicksand-font-header"
+                                                style={{ fontSize: "18px" }}
+                                            >
+                                                {item.name}
+                                            </h5>
+                                            <p
+                                                className="card-text playfair-display-font mb-1"
+                                                style={{ fontSize: "15px" }}
+                                            >
                                                 {item.materials.map((material) => `${material.name.toUpperCase()} `)}
                                             </p>
-                                            <p className="card-text">Størrelse: {item.chosenSize}</p>
-                                            {item.qty <= 10 && <p className="card-text">Kun {item.qty} tilbage</p>}
+                                            <p className="card-text lora-font mb-1" style={{ fontSize: "15px" }}>
+                                                Størrelse: {item.chosenSize}
+                                            </p>
+                                            {item.qty <= 10 && (
+                                                <p
+                                                    className="card-text lora-font"
+                                                    style={{ fontSize: "13px", color: "gray" }}
+                                                >
+                                                    Kun {item.qty} tilbage
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="col-md-2">
                                         <div className="card-body">
-                                            <div>
-                                                <span>{item.quantity}</span>
-                                                <button
-                                                    className="btn border rounded-0"
-                                                    onClick={() => decrementQuantity(item.id)}
-                                                >
-                                                    -
-                                                </button>
-                                                <button
-                                                    className="btn border rounded-0"
-                                                    onClick={() => incrementQuantity(item.id)}
-                                                >
-                                                    +
-                                                </button>
+                                            <div className="hstack">
+                                                <div className=" text-center" style={{ width: "50%" }}>
+                                                    <span className="text-center">{item.quantity}</span>
+                                                </div>
+                                                <div className="vstack">
+                                                    <button
+                                                        className="btn border rounded-0 p-0 "
+                                                        onClick={() => incrementQuantity(item.id)}
+                                                    >
+                                                        +
+                                                    </button>
+                                                    <button
+                                                        className="btn border rounded-0 p-0"
+                                                        onClick={() => decrementQuantity(item.id)}
+                                                    >
+                                                        -
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="col-md-2">
                                         <div className="card-body">
-                                            <p className="card-text text-end">DKK {formatPrice(item.price)}</p>
+                                            <p className="card-text text-end noto-serif-jp-semibold">
+                                                DKK {formatPrice(item.price)}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -134,41 +156,49 @@ function Basket() {
             </div>
 
             {/* Pris total med moms og levering*/}
-            <div className="row justify-content-center">
+            <div className="row justify-content-center mt-3">
                 <div className="col-md-8 ">
                     <div className="card border-0 rounded-0 ">
                         <div className="card-body">
                             <div className="row justify-content-between">
                                 <div className="col-sm-4">
-                                    <p className="card-text">Subtotal: </p>
+                                    <p className="card-text lora-font" style={{ fontSize: "18px" }}>
+                                        Subtotal:{" "}
+                                    </p>
                                 </div>
                                 <div className="col-sm-4">
-                                    <p className="card-text text-end">DDK {totalPrice} </p>
+                                    <p className="card-text text-end noto-serif-jp-semibold">DDK {totalPrice} </p>
                                 </div>
                             </div>
                             <div className="row justify-content-between">
                                 <div className="col-4">
-                                    <p className="card-text">Levering: </p>
+                                    <p className="card-text lora-font " style={{ fontSize: "18px" }}>
+                                        Levering:{" "}
+                                    </p>
                                 </div>
                                 <div className="col-4">
-                                    <p className="card-text text-end"> Gratis</p>
+                                    <p className="card-text text-end noto-serif-jp-semibold"> Gratis</p>
                                 </div>
                             </div>
                             <div className="row justify-content-between">
                                 <div className="col-4">
-                                    <p className="card-text">Moms: </p>
+                                    <p className="card-text lora-font" style={{ fontSize: "18px" }}>
+                                        Moms:{" "}
+                                    </p>
                                 </div>
                                 <div className="col-4">
-                                    <p className="card-text text-end">DDK {totalMoms}</p>
+                                    <p className="card-text text-end noto-serif-jp-semibold">DDK {totalMoms}</p>
                                 </div>
                             </div>
                             <hr />
                             <div className="row justify-content-between">
                                 <div className="col-4">
-                                    <h5 className="card-title">Total:</h5>
+                                    <h5 className="card-title lora-font" style={{ fontSize: "24px" }}>
+                                        Total:
+                                    </h5>
                                 </div>
                                 <div className="col-4">
-                                    <h5 className="card-title text-end"> DKK {totalPrice}</h5>
+                                    <h5 className="card-title text-end noto-serif-jp-semibold"> DKK {totalPrice}</h5>
                                 </div>
                             </div>
                         </div>
@@ -177,8 +207,9 @@ function Basket() {
             </div>
             <div className="row justify-content-end">
                 <div className="col-md-3">
-                    <button className="btn btn-info w-100">
-                        <span>TIL KASSEN</span>
+                    {/* Ændre her når der senere skal inkluderes stripe */}
+                    <button className="btn btn-info w-100 my-5 ">
+                        <span className="quicksand-font-btn">TIL KASSEN</span>
                     </button>
                 </div>
             </div>
