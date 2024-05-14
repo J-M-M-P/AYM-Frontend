@@ -21,12 +21,15 @@ function App() {
                     <Route path="*" element={<NoPage />} />
                     <Route path="/basket" element={<Basket />} />
                     <Route path="/mypage" element={<MyPage />} />
-                    <Route path="/admin" element={
+                    <Route
+                        path="/admin"
+                        element={
                             <RequireAuth roles={["ADMIN"]}>
                                 <Admin />
                             </RequireAuth>
-                        } />
-              
+                        }
+                    />
+
                     <Route path="/login" element={<Login />} />
                 </Routes>
             </Layout>
