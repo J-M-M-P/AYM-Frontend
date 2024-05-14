@@ -1,4 +1,4 @@
-import { Product } from "../pages/Inventory";
+import { Product } from "../components/Admin/Inventory";
 
 const endpoint = "http://localhost:8080";
 

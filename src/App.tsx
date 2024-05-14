@@ -5,8 +5,8 @@ import Layout from "./components/Layout";
 import ProductPage from "./pages/ProductPage";
 import Basket from "./pages/Basket";
 import MyPage from "./pages/MyPage";
-import Inventory from "./pages/Inventory";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import Admin from "./pages/Admin";
 import Login from "./security/Login";
 import RequireAuth from "./security/RequireAuth";
 
@@ -21,14 +21,12 @@ function App() {
                     <Route path="*" element={<NoPage />} />
                     <Route path="/basket" element={<Basket />} />
                     <Route path="/mypage" element={<MyPage />} />
-                    <Route
-                        path="/inventory"
-                        element={
+                    <Route path="/admin" element={
                             <RequireAuth roles={["ADMIN"]}>
-                                <Inventory />
+                                <Admin />
                             </RequireAuth>
-                        }
-                    />
+                        } />
+              
                     <Route path="/login" element={<Login />} />
                 </Routes>
             </Layout>
