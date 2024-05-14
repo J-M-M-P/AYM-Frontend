@@ -5,7 +5,7 @@ function ProductNavbar() {
     return (
         <>
             {/* Filter Dropdowns & Off canvas menu when, width < navbar-expand-md */}
-            <div className="row mb-2 px-3">
+            <div className="row my-4 px-3 quicksand-font-btn">
                 <div className="col px-0">
                     <nav className="navbar navbar-expand-md py-0 h-100">
                         <button
@@ -80,11 +80,35 @@ function ProductNavbar() {
                     </nav>
                 </div>
 
-                {/* Sorting Dropdown button */}
-                <div className="col px-0">
+                {/* Sorting Dropdown button Small Screen*/}
+                <div className="col px-0 d-block d-md-none">
                     <ProductDropDown
                         title="SORTER EFTER"
                         group={true}
+                        smallScreen={true}
+                        items={[
+                            { label: "Nyheder", value: "news", href: "#" },
+                            { label: "Mest populære", value: "most-popular", href: "#" },
+                            {
+                                label: "Pris lav til høj",
+                                value: "pric-low-to-high",
+                                href: "#",
+                            },
+                            {
+                                label: "Pris høj til lav",
+                                value: "price-high-to-low",
+                                href: "#",
+                            },
+                        ]}
+                    />
+                </div>
+
+                {/* Sorting Dropdown Large Screen */}
+                <div className="col px-0 d-none d-md-block ">
+                    <ProductDropDown
+                        title="SORTER EFTER"
+                        group={true}
+                        smallScreen={false}
                         items={[
                             { label: "Nyheder", value: "news", href: "#" },
                             { label: "Mest populære", value: "most-popular", href: "#" },

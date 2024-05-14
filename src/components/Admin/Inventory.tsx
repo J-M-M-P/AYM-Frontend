@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaPlus, FaMinus, FaSortUp, FaSortDown } from "react-icons/fa";
 import { getProducts, updateInventory } from "../../service/apiFacade";
 import { Button, Modal } from "react-bootstrap";
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   qty: number;
