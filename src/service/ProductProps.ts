@@ -9,12 +9,7 @@ export interface ProductColor {
     colorName: string;
 }
 
-export interface ProductSizes {
-    id: number;
-    sizeName: Size[];
-}
-
-interface Size {
+export interface Size {
     id: number;
     sizeName: string;
 }
@@ -36,6 +31,6 @@ export interface ProductProps {
     discountPrice: number;
     categories: ProductCategory[];
     colors: ProductColor[];
-    sizes: ProductSizes[];
+    sizes: Size[];
     materials: ProductMaterial[];
 }

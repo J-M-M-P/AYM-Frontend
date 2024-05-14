@@ -26,7 +26,7 @@ function Basket() {
 
     const groupBasketItems = (items: ProductProps[]): GroupedProductProps[] => {
         const grouped = items.reduce((acc, item) => {
-            const existingItem = acc.find((i) => i.id === item.id);
+            const existingItem = acc.find((i) => i.id === item.id && i.chosenSize === item.chosenSize);
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
@@ -40,24 +40,28 @@ function Basket() {
     const updateLocalStorage = (items: GroupedProductProps[]) => {
         const flattenedItems = items.reduce((acc, item) => {
             for (let i = 0; i < item.quantity; i++) {
-                acc.push({ ...item, uniqueId: `${item.id}-${i}` });
+                acc.push({ ...item, uniqueId: `${item.id}-${item.chosenSize}-${i}` });
             }
             return acc;
         }, [] as ProductProps[]);
         localStorage.setItem("basket", JSON.stringify(flattenedItems));
     };
 
-    const incrementQuantity = (productId: number) => {
+    const incrementQuantity = (productId: number, chosenSize: string) => {
         const updatedBasketItems = basketItems.map((item) =>
-            item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+            item.id === productId && item.chosenSize === chosenSize ? { ...item, quantity: item.quantity + 1 } : item
         );
         setBasketItems(updatedBasketItems);
         updateLocalStorage(updatedBasketItems);
     };
 
-    const decrementQuantity = (productId: number) => {
+    const decrementQuantity = (productId: number, chosenSize: string) => {
         const updatedBasketItems = basketItems
-            .map((item) => (item.id === productId ? { ...item, quantity: item.quantity - 1 } : item))
+            .map((item) =>
+                item.id === productId && item.chosenSize === chosenSize
+                    ? { ...item, quantity: item.quantity - 1 }
+                    : item
+            )
             .filter((item) => item.quantity > 0);
         setBasketItems(updatedBasketItems);
         updateLocalStorage(updatedBasketItems);
@@ -83,8 +87,8 @@ function Basket() {
                 {/* <h4 className="text-center">Valgte produkter</h4> */}
                 {basketItems.length > 0 ? (
                     <div className="col-md-12">
-                        {basketItems.map((item) => (
-                            <div className="card border-0 border-bottom rounded-0" key={item.id}>
+                        {basketItems.map((item, index) => (
+                            <div className="card border-0 border-bottom rounded-0" key={index}>
                                 <div className="row g-0 my-5">
                                     <div className="col-md-2">
                                         <img src={item.image} alt={item.name} className="img-fluid" />
@@ -125,13 +129,17 @@ function Basket() {
                                                 <div className="vstack">
                                                     <button
                                                         className="btn border rounded-0 p-0 "
-                                                        onClick={() => incrementQuantity(item.id)}
+                                                        onClick={() =>
+                                                            incrementQuantity(item.id, item.chosenSize ?? "")
+                                                        }
                                                     >
                                                         +
                                                     </button>
                                                     <button
                                                         className="btn border rounded-0 p-0"
-                                                        onClick={() => decrementQuantity(item.id)}
+                                                        onClick={() =>
+                                                            decrementQuantity(item.id, item.chosenSize ?? "")
+                                                        }
                                                     >
                                                         -
                                                     </button>
@@ -208,9 +216,19 @@ function Basket() {
             <div className="row justify-content-end">
                 <div className="col-md-3">
                     {/* Ændre her når der senere skal inkluderes stripe */}
-                    <button className="btn btn-info w-100 my-5 ">
-                        <span className="quicksand-font-btn">TIL KASSEN</span>
-                    </button>
+                    {(basketItems.length > 0 && (
+                        <button className="btn btn-info w-100 my-5 ">
+                            <span className="quicksand-font-btn">TIL KASSEN</span>
+                        </button>
+                    )) || (
+                        <button
+                            className="btn w-100 my-5 user-select-none unclickable-button"
+                            aria-disabled
+                            style={{ backgroundColor: "#799496" }}
+                        >
+                            <span className="quicksand-font-btn">TIL KASSEN</span>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

@@ -36,6 +36,9 @@
     font-family: "Noto Serif JP", serif;
     font-weight: 600;
     font-style: normal;
-  }
-  
-  
+}
+
+.unclickable-button {
+    pointer-events: none;
+    cursor: default;
+}
