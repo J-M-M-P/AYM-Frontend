@@ -1,6 +1,6 @@
 import { NavLink, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Alert } from "react-bootstrap";
+import { Alert, Dropdown, DropdownButton } from "react-bootstrap";
 import { ProductProps } from "../service/ProductProps";
 import { getSpecificProduct } from "../service/apiFacade";
 import testCards from "../tests/testProductCardInfo";
@@ -8,13 +8,11 @@ import testCards from "../tests/testProductCardInfo";
 function ProductDetailPage() {
     // Hent kurven fra localStorage
     const storedItems = JSON.parse(localStorage.getItem("basket") || "[]");
-    // console.log(storedItems);
-
     const { productId } = useParams<{ productId: string }>();
     const [product, setProduct] = useState<ProductProps | null>(null);
-    // State for kurv
     const [basket, setBasket] = useState<ProductProps[]>(storedItems);
     const [showAlert, setShowAlert] = useState(false);
+    const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -29,26 +27,27 @@ function ProductDetailPage() {
         fetchProduct();
     }, [productId]);
 
-    // Hent kurven fra localStorage når komponenten mounts
     useEffect(() => {
         const loadedCart = localStorage.getItem("basket");
         setBasket(loadedCart ? JSON.parse(loadedCart) : []);
     }, []);
 
-    // Gem kurven til localStorage hver gang den opdateres
     useEffect(() => {
         localStorage.setItem("basket", JSON.stringify(basket));
     }, [basket]);
 
-    // Funktion til at tilføje produkter til kurven
     const addToBasket = (productToAdd: ProductProps) => {
-        const timestamp = Date.now(); // Generer en unik timestamp for hver tilføjelse
-        const productWithId = { ...productToAdd, uniqueId: timestamp }; // Tilføj timestamp til produktet
+        if (!selectedSize) {
+            alert("Vælg venligst en størrelse før du tilføjer produktet til kurven.");
+            return;
+        }
+        const timestamp = String(Date.now());
+        const productWithId = { ...productToAdd, uniqueId: timestamp, chosenSize: selectedSize };
         setBasket((prevBasket) => [...prevBasket, productWithId]);
         setShowAlert(true);
         setTimeout(() => {
             setShowAlert(false);
-        }, 2000); // Skjul alert efter 2 sekunder
+        }, 2000);
     };
 
     if (!product) return <div>Loading...</div>;
@@ -72,24 +71,32 @@ function ProductDetailPage() {
                 <div className="col-md-4 ps-0 py-5">
                     <div className="card h-100 border-0">
                         <div className="card-body">
-                            {/* Beskrivelse af produkt materiale og farve */}
                             <p className="card-text playfair-display-font mb-0 mt-2" style={{ fontSize: "15px" }}>
                                 {product.materials.map((material) => `${material.name.toUpperCase()} `)}
                             </p>
-                            {/* Overskrift */}
                             <h5
                                 className="card-title noto-serif-jp-semibold mt-3"
                                 style={{ fontSize: "25px", marginBottom: "2.5rem" }}
                             >
                                 {product.name}
                             </h5>
-                            {/* Product farve*/}
                             <p className="card-text quicksand-font-btn mt-0 mb-1" style={{ fontSize: "14px" }}>
                                 {product.colors.map((color) => `${color.colorName} `)}
                             </p>
 
-                            {/* Dropdowns for forskellige muligheder */}
-                            <p className="card-text">{product.sizes.map((size) => `${size.sizeName}, `)}</p>
+                            <DropdownButton
+                                id="dropdown-basic-button"
+                                variant=""
+                                title={selectedSize ? selectedSize : "Vælg størrelse"}
+                                onSelect={(e) => setSelectedSize(e as string)}
+                                className="mb-3"
+                            >
+                                {product.sizes.map((size) => (
+                                    <Dropdown.Item key={size.id} eventKey={size.sizeName}>
+                                        {size.sizeName}
+                                    </Dropdown.Item>
+                                ))}
+                            </DropdownButton>
 
                             <div className="lora-font">
                                 {product.onSale ? (
