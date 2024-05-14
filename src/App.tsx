@@ -6,7 +6,8 @@ import ProductPage from "./pages/ProductPage";
 import Basket from "./pages/Basket";
 import MyPage from "./pages/MyPage";
 import Admin from "./pages/Admin";
-import Login from "./pages/Login";
+import Login from "./security/Login";
+import RequireAuth from "./security/RequireAuth";
 
 function App() {
     return (
@@ -18,7 +19,12 @@ function App() {
                     <Route path="*" element={<NoPage />} />
                     <Route path="/basket" element={<Basket />} />
                     <Route path="/mypage" element={<MyPage />} />
-                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/admin" element={
+                            <RequireAuth roles={["ADMIN"]}>
+                                <Admin />
+                            </RequireAuth>
+                        } />
+              
                     <Route path="/login" element={<Login />} />
                 </Routes>
             </Layout>
