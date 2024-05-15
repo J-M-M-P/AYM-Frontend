@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import Layout from "./components/Layout";
@@ -11,15 +11,11 @@ import Login from "./security/Login";
 import RequireAuth from "./security/RequireAuth";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import CheckoutForm from "./pages/CheckoutForm";
+import Checkout from "./pages/Checkout";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
 function App() {
-    const options = {
-        // passing the client secret obtained from the server
-        clientSecret: '{{CLIENT_SECRET}}',
-    };
     
     return (
         <>
@@ -41,13 +37,7 @@ function App() {
                     />
 
                     <Route path="/login" element={<Login />} />
-                    <Route
-                        path="/checkout"
-                        element={
-                            <Elements stripe={stripePromise} options={options}>
-                                <CheckoutForm />
-                            </Elements>
-                        }/>
+                    <Route path="/checkout" element={<Elements stripe={stripePromise}><Checkout /></Elements>} />
                 </Routes>
             </Layout>
         </>
