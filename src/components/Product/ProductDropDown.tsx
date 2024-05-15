@@ -11,9 +11,10 @@ interface DropdownProps {
     smallScreen?: boolean;
     title: string;
     items: DropdownItem[];
+    onSelect: (value: string) => void;
 }
 
-function ProductDropDown({ title, items, group, smallScreen }: DropdownProps) {
+function ProductDropDown({ title, items, group, smallScreen, onSelect }: DropdownProps) {
     const [dropDownGroup] = useState(group);
 
     return (
@@ -31,7 +32,13 @@ function ProductDropDown({ title, items, group, smallScreen }: DropdownProps) {
                     <ul className="dropdown-menu shadow-lg">
                         {items.map((item, index) => (
                             <li key={index}>
-                                <a className="dropdown-item" href={item.href}>
+                                <a
+                                    className="dropdown-item"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        onSelect(item.value);
+                                    }}
+                                >
                                     <span>{item.label}</span>
                                 </a>
                             </li>
@@ -52,7 +59,13 @@ function ProductDropDown({ title, items, group, smallScreen }: DropdownProps) {
                         <ul className="dropdown-menu dropdown-menu-end">
                             {items.map((item, index) => (
                                 <li key={index}>
-                                    <a className="dropdown-item" href={item.href}>
+                                    <a
+                                        className="dropdown-item"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onSelect(item.value);
+                                        }}
+                                    >
                                         <span>{item.label}</span>
                                     </a>
                                 </li>
@@ -72,7 +85,13 @@ function ProductDropDown({ title, items, group, smallScreen }: DropdownProps) {
                         <ul className="dropdown-menu dropdown-menu-end shadow-lg">
                             {items.map((item, index) => (
                                 <li key={index}>
-                                    <a className="dropdown-item" href={item.href}>
+                                    <a
+                                        className="dropdown-item"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onSelect(item.value);
+                                        }}
+                                    >
                                         <span>{item.label}</span>
                                     </a>
                                 </li>
