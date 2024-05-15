@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { GroupedProductProps } from "../../pages/Basket";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -10,6 +11,31 @@ const CheckoutForm = () => {
   const [name, setName] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [zip, setZip] = useState<string>("");
+  const [basketItems, setBasketItems] = useState<GroupedProductProps[]>([]);
+  const [totalPrice, setTotalPrice] = useState<string>("0,00");
+
+  useEffect(() => {
+    loadBasketItems();
+  }, []);
+
+  const loadBasketItems = () => {
+    const storedBasket = localStorage.getItem("basket");
+    if (storedBasket) {
+      const parsedItems: GroupedProductProps[] = JSON.parse(storedBasket);
+      setBasketItems(parsedItems);
+      calculateTotalPrice(parsedItems);
+    }
+  };
+
+  const calculateTotalPrice = (items: GroupedProductProps[]) => {
+    const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    setTotalPrice(formatPrice(total));
+  };
+
+  const formatPrice = (price: number): string => {
+    const formattedPrice = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return formattedPrice.replace(".", ",");
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -44,13 +70,14 @@ const CheckoutForm = () => {
 
   const handlePayment = async (paymentMethod: any) => {
     // Send payment details to your server
-    const response = await fetch("/api/charge", {
+    const response = await fetch(`${import.meta.env.VITE_DEV_API_BASE_URL}/create-payment-intent`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        payment_method: paymentMethod.id
+        amount: parseFloat(totalPrice.replace(",", ".")), // Convert totalPrice to a number
+        currency: "DKK"
       })
     });
 
@@ -88,7 +115,8 @@ const CheckoutForm = () => {
               invalid: {
                 color: "#9e2146"
               }
-            }
+            },
+            hidePostalCode: true // Hide the postal code field
           }}
         />
       </div>

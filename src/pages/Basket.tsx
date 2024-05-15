@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-//interface
 import { ProductProps } from "../service/ProductProps";
-//css
-import "../components/Product/ProductPage.css";
 
-interface GroupedProductProps extends ProductProps {
+export interface GroupedProductProps extends ProductProps {
   quantity: number;
 }
 
@@ -234,4 +231,3 @@ function Basket() {
 }
 
 export default Basket;
-
