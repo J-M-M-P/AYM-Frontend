@@ -56,4 +56,41 @@ async function updateInventory(id: number, products: Product) {
     }
 }
 
-export { getProducts, updateInventory, getSpecificProduct };
+// ------- MATERIALS ------- //
+
+async function getMaterials() {
+    const url = `${endpoint}/api/materials`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json(); // Extract JSON data from response body
+        // console.log("Products:", data); // Log the fetched data
+        return data; // Return the fetched data
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        throw error;
+    }
+}
+
+
+// ------- CATEGORIES ------- //
+
+async function getCategories() {
+    const url = `${endpoint}/api/categories`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json(); // Extract JSON data from response body
+        // console.log("Products:", data); // Log the fetched data
+        return data; // Return the fetched data
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        throw error;
+    }
+}
+
+export { getProducts, updateInventory, getSpecificProduct, getMaterials, getCategories };

@@ -1,7 +1,31 @@
 import ProductDropDown from "./ProductDropDown";
-// import "./ProductNavbar.css";
+import { useEffect, useState } from "react";
+import { getCategories, getMaterials } from "../../service/apiFacade";
 
-function ProductNavbar() {
+interface ProductNavbarProps {
+    handleSort: (sortOption: string) => void;
+    handleFilter: (filterKey: string, filterValue: string) => void;
+}
+
+function ProductNavbar({ handleSort, handleFilter }: ProductNavbarProps) {
+    const [categories, setCategories] = useState<string[]>([]);
+    const [materials, setMaterials] = useState<string[]>([]);
+
+    // Fetch categories & materials from API
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const categoriesData = await getCategories();
+                setCategories(categoriesData);
+                const materialsData = await getMaterials();
+                setMaterials(materialsData);
+            } catch (error) {
+                console.error("Error fetching categories & materials:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
     return (
         <>
             {/* Filter Dropdowns & Off canvas menu when, width < navbar-expand-md */}
@@ -49,31 +73,40 @@ function ProductNavbar() {
                                                 { label: "Kr 2000 - 3999", value: "2000-3999", href: "#" },
                                                 { label: "Kr 4000+", value: "4000+", href: "#" },
                                             ]}
+                                            onSelect={(value) => handleFilter("price", value)}
                                         />
                                     </li>
                                     <li className="nav-item">
                                         <ProductDropDown
                                             title="PRODUKT TYPE"
                                             group={false}
-                                            items={[
-                                                { label: "Ring", value: "ring", href: "#" },
-                                                { label: "Ørering", value: "earing", href: "#" },
-                                                { label: "Halskæde", value: "necklace", href: "#" },
-                                            ]}
+                                            items={categories.map((category) => ({
+                                                label: category.name.toString(),
+                                                value: category.name.toString(),
+                                                href: "#",
+                                            }))}
+                                            onSelect={(value) => handleFilter("category", value)}
                                         />
                                     </li>
                                     <li className="nav-item">
                                         <ProductDropDown
                                             title="MATERIALE"
                                             group={false}
-                                            items={[
-                                                { label: "Guld", value: "gold", href: "#" },
-                                                { label: "Sølv", value: "silver", href: "#" },
-                                                { label: "Platin", value: "platinum", href: "#" },
-                                                { label: "Genanvedt plastik", value: "plastic", href: "#" },
-                                            ]}
+                                            items={materials.map((material) => ({
+                                                label: material.name.toString(),
+                                                value: material.name.toString(),
+                                                href: "#",
+                                            }))}
+                                            onSelect={(value) => handleFilter("material", value)}
                                         />
                                     </li>
+                                    <button
+                                        className="btn quicksand-font-btn align-self-end py-0"
+                                        style={{ fontSize: "14px" }}
+                                        onClick={() => handleFilter("price", "")}
+                                    >
+                                        Fjern filter
+                                    </button>
                                 </ul>
                             </div>
                         </div>
@@ -91,7 +124,7 @@ function ProductNavbar() {
                             { label: "Mest populære", value: "most-popular", href: "#" },
                             {
                                 label: "Pris lav til høj",
-                                value: "pric-low-to-high",
+                                value: "price-low-to-high",
                                 href: "#",
                             },
                             {
@@ -100,6 +133,7 @@ function ProductNavbar() {
                                 href: "#",
                             },
                         ]}
+                        onSelect={handleSort}
                     />
                 </div>
 
@@ -114,7 +148,7 @@ function ProductNavbar() {
                             { label: "Mest populære", value: "most-popular", href: "#" },
                             {
                                 label: "Pris lav til høj",
-                                value: "pric-low-to-high",
+                                value: "price-low-to-high",
                                 href: "#",
                             },
                             {
@@ -123,6 +157,7 @@ function ProductNavbar() {
                                 href: "#",
                             },
                         ]}
+                        onSelect={handleSort}
                     />
                 </div>
             </div>
