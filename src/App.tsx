@@ -37,7 +37,7 @@ function App() {
                     />
 
                     <Route path="/login" element={<Login />} />
-                    <Route path="/checkout" element={<Elements stripe={stripePromise}><Checkout /></Elements>} />
+                    <Route path="/checkout" element={<Elements stripe={stripePromise} ><Checkout /></Elements>} />
                 </Routes>
             </Layout>
         </>

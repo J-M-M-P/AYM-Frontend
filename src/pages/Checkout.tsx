@@ -3,24 +3,40 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useState, useEffect } from "react";
 import { GroupedProductProps } from "./Basket";
 import CheckoutForm from "../components/Stripe/CheckoutForm";
+import { ProductProps } from "../service/ProductProps";
+
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
 const Checkout = () => {
-  const [basketItems, setBasketItems] = useState<GroupedProductProps[]>([]);
-
-  useEffect(() => {
-    loadBasketItems();
-  }, []);
-
-  const loadBasketItems = () => {
-    const storedBasket = localStorage.getItem("basket");
-    if (storedBasket) {
-      const parsedItems: GroupedProductProps[] = JSON.parse(storedBasket);
-      setBasketItems(parsedItems);
-    }
-  };
-
+    const [basketItems, setBasketItems] = useState<GroupedProductProps[]>([]);
+  
+    useEffect(() => {
+      loadBasketItems();
+    }, []);
+  
+    const loadBasketItems = () => {
+        const storedBasket = localStorage.getItem("basket");
+        if (storedBasket) {
+          const parsedItems: ProductProps[] = JSON.parse(storedBasket);
+          const itemMap = new Map<number, GroupedProductProps>();
+      
+          // Group items by ID and calculate quantity
+          parsedItems.forEach(item => {
+            const existingItem = itemMap.get(item.id);
+            if (existingItem) {
+              existingItem.quantity += 1;
+            } else {
+              itemMap.set(item.id, { ...item, quantity: 1 });
+            }
+          });
+      
+          // Convert map values to array
+          const uniqueItems = Array.from(itemMap.values());
+          setBasketItems(uniqueItems);
+        }
+      };
+      
   const formatPrice = (price: number): string => {
     const formattedPrice = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return formattedPrice.replace(".", ",");
@@ -29,6 +45,9 @@ const Checkout = () => {
   const totalPrice = formatPrice(
     basketItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
   );
+
+  
+  console.log(totalPrice);
 
   return (
     <div className="container">
@@ -48,14 +67,20 @@ const Checkout = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {basketItems.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.name}</td>
-                      <td>{item.chosenSize}</td>
-                      <td>{item.quantity}</td>
-                      <td>DKK {formatPrice(item.price * item.quantity)}</td>
-                    </tr>
-                  ))}
+{basketItems.map((item, index) => {
+  console.log("Price:", item.price);
+  console.log("Quantity:", item.quantity);
+  console.log("Item:", item);
+
+  return (
+    <tr key={index}>
+      <td>{item.name}</td>
+      <td>{item.chosenSize}</td>
+      <td>{item.quantity}</td>
+      <td>DKK {formatPrice(item.price * item.quantity)}</td>
+    </tr>
+  );
+})}
                 </tbody>
               </table>
             </div>

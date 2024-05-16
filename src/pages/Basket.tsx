@@ -15,7 +15,7 @@ function Basket() {
   }, []);
 
   const loadBasketItems = () => {
-    const storedBasket = localStorage.getItem("basket");
+      const storedBasket = localStorage.getItem("basket");
     if (storedBasket) {
       const parsedItems: ProductProps[] = JSON.parse(storedBasket);
       const groupedItems = groupBasketItems(parsedItems);
@@ -80,7 +80,8 @@ function Basket() {
   const totalPrice = formatPrice(
     basketItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
   );
-
+  
+  console.log(totalPrice);
   const handleCheckout = () => {
     console.log("Handle Checkout called");
     navigate("/checkout");
