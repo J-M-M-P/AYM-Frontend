@@ -1,0 +1,23 @@
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-section-left {
+  justify-content: flex-start;
+  margin-left: 50px;
+}
+
+.navbar-section-right {
+  justify-content: flex-end;
+  margin-right: 50px;
+}
