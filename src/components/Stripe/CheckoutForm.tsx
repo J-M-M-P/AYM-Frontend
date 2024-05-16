@@ -69,6 +69,11 @@ const CheckoutForm = () => {
   };
 
   const handlePayment = async (paymentMethod: any) => {
+    // Convert totalPrice to øre (smallest currency unit)
+    const amountInOre = Math.round(parseFloat(totalPrice.replace(/[\.,]/g, ""))); // Removing commas and dots
+    console.log("Amount in øre:", amountInOre);
+    console.log("Payment method:", paymentMethod); // Log the payment method
+  
     // Send payment details to your server
     const response = await fetch(`${import.meta.env.VITE_DEV_API_BASE_URL}/create-payment-intent`, {
       method: "POST",
@@ -76,17 +81,46 @@ const CheckoutForm = () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        amount: parseFloat(totalPrice.replace(",", ".")), // Convert totalPrice to a number
-        currency: "DKK"
+        amount: amountInOre,
+        currency: "DKK",
+        paymentMethod: paymentMethod.id // Add payment method ID
       })
     });
-
+    
     if (response.ok) {
-      console.log("Payment successful!");
+      const data = await response.json();
+      confirmPayment(data.clientSecret);
     } else {
       console.error("Payment failed!");
     }
-  };
+};
+
+const confirmPayment = async (clientSecret: string | undefined) => {
+
+  if (!clientSecret) {
+    console.log("Client Secret is undefined");
+    return;
+  }
+
+  const result = await stripe!.confirmCardPayment(clientSecret, {
+    payment_method: {
+      card: elements!.getElement(CardElement)!
+    }
+  });
+
+  console.log("Payment Result:", result);
+
+  if (result.error) {
+    setPaymentError(result.error.message || "");
+    setPaymentSuccess(false);
+  } else {
+    setPaymentError(null);
+    setPaymentSuccess(true);
+    console.log("Payment successful!");
+  }
+};
+    
+  
 
   return (
     <form onSubmit={handleSubmit} className="w-50 mx-auto mt-5">
