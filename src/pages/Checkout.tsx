@@ -88,9 +88,11 @@ const Checkout = () => {
           </div>
         </div>
         <div className="col-md-6">
+        <h1 className="text-center mt-5 mb-4 playfair-display-font">Betaling</h1>
+            <hr className="mb-0" style={{marginBottom: "0px"}} />
           <div className="mt-5">
             <div className="card border-0 rounded-0 ">
-              <div className="card-body">
+              <div className="card-body" style={{paddingTop: "0"}}>
                 <Elements stripe={stripePromise}>
                   <CheckoutForm />
                 </Elements>
