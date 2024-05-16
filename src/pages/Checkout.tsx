@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { GroupedProductProps } from "./Basket";
 import CheckoutForm from "../components/Stripe/CheckoutForm";
 import { ProductProps } from "../service/ProductProps";
-
+import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
@@ -53,7 +54,11 @@ const Checkout = () => {
     <div className="container">
       <div className="row">
         <div className="col-md-6">
-          <h1 className="text-center mt-5 mb-4 playfair-display-font">Kurv</h1>
+          {/* Back to Basket link */}
+          <Link to="/basket" className="checkout-back-link">
+            <FaArrowLeft className="checkout-back-icon" />
+            <span className="checkout-back-text">Tilbage til Kurv</span>
+          </Link>          <h1 className="text-center mt-5 mb-4 playfair-display-font">Kurv</h1>
           <hr className="mb-0" />
           {basketItems.length > 0 ? (
             <div className="table-responsive">
