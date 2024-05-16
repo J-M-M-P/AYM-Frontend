@@ -7,7 +7,9 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
     return (
         <div>
-            <header><NavHeader /></header>
+            <header className="bg-dark">
+                <NavHeader />
+            </header>
             <main>{children}</main>
         </div>
     );
