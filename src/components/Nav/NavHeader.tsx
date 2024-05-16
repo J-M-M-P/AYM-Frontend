@@ -18,6 +18,7 @@ export default function NavHeader() {
                                 aria-labelledby="offcanvasNavbar-expand-lg"
                                 className="bg-dark"
                                 placement="start"
+                                style={{ maxWidth: "70%" }}
                             >
                                 <Offcanvas.Header closeButton />
                                 <Offcanvas.Body>
