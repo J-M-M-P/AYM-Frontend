@@ -12,8 +12,13 @@ import RequireAuth from "./security/RequireAuth";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Checkout from "./pages/Checkout";
+import About from "./pages/About";
+import Faq from "./pages/Faq";
+import Contact from "./pages/Contact";
+
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
+
 
 function App() {
     
@@ -38,6 +43,9 @@ function App() {
 
                     <Route path="/login" element={<Login />} />
                     <Route path="/checkout" element={<Elements stripe={stripePromise} ><Checkout /></Elements>} />
+                    <Route path="/faq" element={<Faq />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
                 </Routes>
             </Layout>
         </>
