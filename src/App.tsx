@@ -9,9 +9,9 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import Admin from "./pages/Admin";
 import Login from "./security/Login";
 import RequireAuth from "./security/RequireAuth";
-import About from "./components/Footer/About";
-import Faq from "./components/Footer/Faq";
-import Contact from "./components/Footer/Contact";
+import About from "./pages/About";
+import Faq from "./pages/Faq";
+import Contact from "./pages/Contact";
 
 function App() {
     return (
