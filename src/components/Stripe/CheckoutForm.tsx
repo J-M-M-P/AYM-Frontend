@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { GroupedProductProps } from "../../pages/Basket";
+import SuccessModal from "./SuccesModal";
+import { ProductProps } from "../../service/ProductProps";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -12,30 +14,59 @@ const CheckoutForm = () => {
   const [country, setCountry] = useState<string>("");
   const [zip, setZip] = useState<string>("");
   const [basketItems, setBasketItems] = useState<GroupedProductProps[]>([]);
-  const [totalPrice, setTotalPrice] = useState<string>("0,00");
+  //const [totalPrice, setTotalPrice] = useState<string>("0,00");
+  const [showModal, setShowModal] = useState(false);
+
 
   useEffect(() => {
     loadBasketItems();
   }, []);
 
+  
   const loadBasketItems = () => {
     const storedBasket = localStorage.getItem("basket");
     if (storedBasket) {
-      const parsedItems: GroupedProductProps[] = JSON.parse(storedBasket);
-      setBasketItems(parsedItems);
-      calculateTotalPrice(parsedItems);
+      const parsedItems: ProductProps[] = JSON.parse(storedBasket);
+      const itemMap = new Map<number, GroupedProductProps>();
+  
+      // Group items by ID and calculate quantity
+      parsedItems.forEach(item => {
+        const existingItem = itemMap.get(item.id);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          itemMap.set(item.id, { ...item, quantity: 1 });
+        }
+      });
+  
+      // Convert map values to array
+      const uniqueItems = Array.from(itemMap.values());
+      setBasketItems(uniqueItems);
     }
   };
+  
+const formatPrice = (price: number): string => {
+const formattedPrice = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+return formattedPrice.replace(".", ",");
+};
 
-  const calculateTotalPrice = (items: GroupedProductProps[]) => {
-    const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    setTotalPrice(formatPrice(total));
+const totalPrice = formatPrice(
+basketItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
+);
+
+    // Function to handle successful payment
+  const handlePaymentSuccess = () => {
+    // Clear basket in LocalStorage
+    localStorage.removeItem("basket");
+    // Show success modal
+    setShowModal(true);
+  };
+  
+  // Function to close modal
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
-  const formatPrice = (price: number): string => {
-    const formattedPrice = price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return formattedPrice.replace(".", ",");
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -90,6 +121,9 @@ const CheckoutForm = () => {
     if (response.ok) {
       const data = await response.json();
       confirmPayment(data.clientSecret);
+      handlePaymentSuccess();
+      console.log("Payment successful!");
+  
     } else {
       console.error("Payment failed!");
     }
@@ -116,7 +150,6 @@ const confirmPayment = async (clientSecret: string | undefined) => {
   } else {
     setPaymentError(null);
     setPaymentSuccess(true);
-    console.log("Payment successful!");
   }
 };
     
@@ -172,9 +205,10 @@ const confirmPayment = async (clientSecret: string | undefined) => {
         Betal
       </button>
       {paymentError && <p className="text-danger mt-3">{paymentError}</p>}
-      {paymentSuccess && <p className="text-success mt-3">Payment successful!</p>}
+      {paymentSuccess && <SuccessModal show={showModal} handleClose={handleCloseModal} />}
     </form>
   );
 };
+
 
 export default CheckoutForm;
