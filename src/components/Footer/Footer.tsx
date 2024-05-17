@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 function Footer() {
     return (
-        <footer className="bg-dark fixed-bottom text-white">
+        <footer className="bg-dark sticky-bottom text-white">
             <ul className="nav justify-content-center">
                 <li className="nav-item">
                     <NavLink to="/faq" className="nav-link text-white">

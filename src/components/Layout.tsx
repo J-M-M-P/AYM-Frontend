@@ -8,11 +8,13 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
     return (
         <div>
-            <header className="bg-dark">
+            <header className="bg-dark user-select-none">
                 <NavHeader />
             </header>
-            <main>{children}</main>
-            <footer><Footer /></footer>
+            <main className="user-select-none">{children}</main>
+            <footer className="user-select-none">
+                <Footer />
+            </footer>
         </div>
     );
 };
