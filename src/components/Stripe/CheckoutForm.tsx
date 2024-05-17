@@ -102,8 +102,6 @@ basketItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
   const handlePayment = async (paymentMethod: any) => {
     // Convert totalPrice to øre (smallest currency unit)
     const amountInOre = Math.round(parseFloat(totalPrice.replace(/[\.,]/g, ""))); // Removing commas and dots
-    console.log("Amount in øre:", amountInOre);
-    console.log("Payment method:", paymentMethod); // Log the payment method
   
     // Send payment details to your server
     const response = await fetch(`${import.meta.env.VITE_DEV_API_BASE_URL}/create-payment-intent`, {
@@ -132,7 +130,6 @@ basketItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
 const confirmPayment = async (clientSecret: string | undefined) => {
 
   if (!clientSecret) {
-    console.log("Client Secret is undefined");
     return;
   }
 
@@ -142,7 +139,6 @@ const confirmPayment = async (clientSecret: string | undefined) => {
     }
   });
 
-  console.log("Payment Result:", result);
 
   if (result.error) {
     setPaymentError(result.error.message || "");

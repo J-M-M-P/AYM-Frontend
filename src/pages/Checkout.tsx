@@ -48,7 +48,6 @@ const Checkout = () => {
   );
 
   
-  console.log(totalPrice);
 
   return (
     <div className="container">
@@ -73,9 +72,6 @@ const Checkout = () => {
                 </thead>
                 <tbody>
 {basketItems.map((item, index) => {
-  console.log("Price:", item.price);
-  console.log("Quantity:", item.quantity);
-  console.log("Item:", item);
 
   return (
     <tr key={index}>

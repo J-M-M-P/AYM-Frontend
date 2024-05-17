@@ -81,9 +81,7 @@ function Basket() {
     basketItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
   );
   
-  console.log(totalPrice);
   const handleCheckout = () => {
-    console.log("Handle Checkout called");
     navigate("/checkout");
   };
 
