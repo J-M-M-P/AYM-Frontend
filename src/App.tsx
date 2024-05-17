@@ -9,6 +9,9 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import Admin from "./pages/Admin";
 import Login from "./security/Login";
 import RequireAuth from "./security/RequireAuth";
+import About from "./pages/About";
+import Faq from "./pages/Faq";
+import Contact from "./pages/Contact";
 
 function App() {
     return (
@@ -31,6 +34,9 @@ function App() {
                     />
 
                     <Route path="/login" element={<Login />} />
+                    <Route path="/faq" element={<Faq />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
                 </Routes>
             </Layout>
         </>
